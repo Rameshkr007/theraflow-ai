@@ -1,0 +1,181 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   THERAFLOW DESIGN TOKENS
+   All UI components MUST consume these tokens.
+   Never hardcode color, spacing, or radius values.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* ── Brand Colors ────────────────────────────────────────────────────────── */
+    --color-primary: 45 106 79;           /* #2D6A4F – deep forest green */
+    --color-primary-light: 82 183 136;    /* #52B788 */
+    --color-primary-dark: 27 67 50;       /* #1B4332 */
+    --color-primary-muted: 210 235 224;   /* #D2EBE0 – for subtle backgrounds */
+
+    --color-secondary: 123 111 160;       /* #7B6FA0 – muted purple */
+    --color-secondary-light: 184 172 212; /* #B8ACD4 */
+    --color-secondary-dark: 85 75 120;    /* #554B78 */
+    --color-secondary-muted: 235 232 245; /* #EBE8F5 */
+
+    /* ── Surface Colors ──────────────────────────────────────────────────────── */
+    --color-surface: 250 250 248;         /* #FAFAF8 – warm off-white base */
+    --color-surface-raised: 255 255 255;  /* #FFFFFF */
+    --color-surface-subtle: 245 244 240;  /* #F5F4F0 – cards, panels */
+    --color-surface-overlay: 240 239 233; /* #F0EFE9 – hover states */
+
+    /* ── Text Colors ─────────────────────────────────────────────────────────── */
+    --color-text-primary: 26 26 26;       /* #1A1A1A */
+    --color-text-secondary: 74 74 74;     /* #4A4A4A */
+    --color-text-muted: 138 138 138;      /* #8A8A8A */
+    --color-text-disabled: 196 194 190;   /* #C4C2BE */
+    --color-text-inverse: 255 255 255;    /* #FFFFFF */
+
+    /* ── Border Colors ───────────────────────────────────────────────────────── */
+    --color-border: 232 230 224;          /* #E8E6E0 */
+    --color-border-subtle: 240 238 232;   /* #F0EEE8 */
+    --color-border-strong: 196 192 184;   /* #C4C0B8 */
+    --color-border-focus: 45 106 79;      /* Same as primary */
+
+    /* ── Semantic Colors ─────────────────────────────────────────────────────── */
+    --color-success: 45 106 79;           /* #2D6A4F */
+    --color-success-light: 240 249 244;   /* #F0F9F4 */
+    --color-warning: 180 83 9;            /* #B45309 */
+    --color-warning-light: 255 247 237;   /* #FFF7ED */
+    --color-error: 192 57 43;             /* #C0392B */
+    --color-error-light: 254 242 242;     /* #FEF2F2 */
+    --color-info: 37 99 235;              /* #2563EB */
+    --color-info-light: 239 246 255;      /* #EFF6FF */
+
+    /* ── Typography ──────────────────────────────────────────────────────────── */
+    --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-serif: 'Lora', Georgia, Cambria, 'Times New Roman', serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+
+    /* Type scale */
+    --text-xs: 0.75rem;      /* 12px */
+    --text-sm: 0.875rem;     /* 14px */
+    --text-base: 1rem;       /* 16px */
+    --text-md: 1.125rem;     /* 18px */
+    --text-lg: 1.25rem;      /* 20px */
+    --text-xl: 1.5rem;       /* 24px */
+    --text-2xl: 1.875rem;    /* 30px */
+    --text-3xl: 2.25rem;     /* 36px */
+    --text-4xl: 3rem;        /* 48px */
+    --text-5xl: 3.75rem;     /* 60px */
+
+    /* Line heights */
+    --leading-tight: 1.25;
+    --leading-snug: 1.375;
+    --leading-normal: 1.5;
+    --leading-relaxed: 1.625;
+    --leading-loose: 2;
+
+    /* Letter spacing */
+    --tracking-tight: -0.025em;
+    --tracking-normal: 0em;
+    --tracking-wide: 0.025em;
+    --tracking-wider: 0.05em;
+    --tracking-widest: 0.1em;
+
+    /* Font weights */
+    --font-light: 300;
+    --font-normal: 400;
+    --font-medium: 500;
+    --font-semibold: 600;
+    --font-bold: 700;
+    --font-extrabold: 800;
+
+    /* ── Spacing (4px base scale) ────────────────────────────────────────────── */
+    --space-px: 1px;
+    --space-0: 0;
+    --space-0-5: 0.125rem;  /* 2px */
+    --space-1: 0.25rem;     /* 4px */
+    --space-1-5: 0.375rem;  /* 6px */
+    --space-2: 0.5rem;      /* 8px */
+    --space-2-5: 0.625rem;  /* 10px */
+    --space-3: 0.75rem;     /* 12px */
+    --space-4: 1rem;        /* 16px */
+    --space-5: 1.25rem;     /* 20px */
+    --space-6: 1.5rem;      /* 24px */
+    --space-7: 1.75rem;     /* 28px */
+    --space-8: 2rem;        /* 32px */
+    --space-10: 2.5rem;     /* 40px */
+    --space-12: 3rem;       /* 48px */
+    --space-14: 3.5rem;     /* 56px */
+    --space-16: 4rem;       /* 64px */
+    --space-20: 5rem;       /* 80px */
+    --space-24: 6rem;       /* 96px */
+    --space-32: 8rem;       /* 128px */
+
+    /* ── Border Radius ───────────────────────────────────────────────────────── */
+    --radius-none: 0;
+    --radius-sm: 0.25rem;   /* 4px */
+    --radius-md: 0.5rem;    /* 8px */
+    --radius-lg: 0.75rem;   /* 12px */
+    --radius-xl: 1rem;      /* 16px */
+    --radius-2xl: 1.5rem;   /* 24px */
+    --radius-3xl: 2rem;     /* 32px */
+    --radius-full: 9999px;
+
+    /* ── Shadows ─────────────────────────────────────────────────────────────── */
+    --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.04);
+    --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.04);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.08), 0 8px 10px -6px rgb(0 0 0 / 0.04);
+    --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.18);
+    --shadow-focus: 0 0 0 2px rgb(var(--color-surface-raised)), 0 0 0 4px rgb(var(--color-primary));
+    --shadow-focus-error: 0 0 0 2px rgb(var(--color-surface-raised)), 0 0 0 4px rgb(var(--color-error));
+
+    /* ── Motion ──────────────────────────────────────────────────────────────── */
+    --duration-instant: 0ms;
+    --duration-fast: 120ms;
+    --duration-base: 200ms;
+    --duration-slow: 300ms;
+    --duration-slower: 500ms;
+    --duration-slowest: 700ms;
+
+    --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);  /* Material standard */
+    --ease-enter: cubic-bezier(0, 0, 0.2, 1);        /* Decelerate */
+    --ease-exit: cubic-bezier(0.4, 0, 1, 1);          /* Accelerate */
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* Overshoot/spring */
+    --ease-linear: linear;
+
+    /* ── Z-Index ─────────────────────────────────────────────────────────────── */
+    --z-base: 0;
+    --z-raised: 10;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-overlay: 300;
+    --z-modal: 400;
+    --z-toast: 500;
+    --z-tooltip: 600;
+
+    /* ── Layout ──────────────────────────────────────────────────────────────── */
+    --sidebar-width: 256px;
+    --sidebar-collapsed-width: 64px;
+    --topbar-height: 56px;
+    --content-max-width: 1280px;
+    --page-padding-x: 2rem;
+    --page-padding-y: 2rem;
+  }
+
+  /* ── Dark mode token overrides ───────────────────────────────────────────── */
+  /* Uncomment and customize when adding dark mode support */
+  /*
+  .dark {
+    --color-surface: 16 18 20;
+    --color-surface-raised: 24 27 30;
+    --color-surface-subtle: 20 22 25;
+    --color-text-primary: 240 240 240;
+    --color-text-secondary: 190 190 190;
+    --color-text-muted: 120 120 120;
+    --color-border: 40 44 48;
+    --color-border-subtle: 30 33 36;
+  }
+  */
+}

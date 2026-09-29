@@ -1,0 +1,1381 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ENUMS
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum TenantStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  TRIAL
+}
+
+enum MemberRole {
+  OWNER
+  ADMIN
+  MANAGER
+  EDITOR
+  STAFF
+  VIEWER
+}
+
+enum InviteStatus {
+  PENDING
+  ACCEPTED
+  EXPIRED
+  REVOKED
+}
+
+enum PracticeType {
+  INDIVIDUAL
+  GROUP
+  CLINIC
+  TELEHEALTH
+}
+
+enum PracticeStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+enum ServiceType {
+  INDIVIDUAL
+  GROUP
+  WORKSHOP
+  INTENSIVE
+}
+
+enum WebsiteStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum PageType {
+  HOME
+  ABOUT
+  SERVICE
+  SPECIALTY
+  FAQ
+  CONTACT
+  BLOG
+  LOCATION
+  TEAM
+  PRICING
+  CUSTOM
+}
+
+enum ContentStatus {
+  DRAFT
+  REVIEW
+  APPROVED
+  PUBLISHED
+  ARCHIVED
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+  NO_SHOW
+  RESCHEDULED
+}
+
+enum InquiryStatus {
+  NEW
+  READ
+  REPLIED
+  ARCHIVED
+  SPAM
+}
+
+enum InquiryIntent {
+  BOOKING
+  INFORMATION
+  REFERRAL
+  COMPLAINT
+  OTHER
+}
+
+enum InquirySource {
+  WEBSITE
+  API
+  MANUAL
+  EMAIL
+}
+
+enum KnowledgeStatus {
+  DRAFT
+  REVIEW
+  APPROVED
+  ARCHIVED
+}
+
+enum KnowledgeType {
+  SERVICE
+  FAQ
+  POLICY
+  TEAM
+  LOCATION
+  GENERAL
+  TESTIMONIAL
+}
+
+enum KnowledgeSource {
+  MANUAL
+  DOCUMENT
+  SERVICE
+  BOOKING
+  AI_GENERATED
+}
+
+enum DocumentProcessingStatus {
+  PENDING
+  EXTRACTING
+  CHUNKING
+  INDEXING
+  COMPLETE
+  FAILED
+}
+
+enum VirusScanStatus {
+  PENDING
+  CLEAN
+  INFECTED
+  ERROR
+  SKIPPED
+}
+
+enum AiConversationType {
+  VISITOR_CHAT
+  COPILOT
+  CONTENT_GEN
+  SEO
+  ANALYTICS
+  ONBOARDING
+}
+
+enum AiActionStatus {
+  PENDING
+  PLANNED
+  PREVIEWING
+  APPROVED
+  EXECUTING
+  COMPLETED
+  REJECTED
+  FAILED
+  CANCELLED
+}
+
+enum PromptStatus {
+  DRAFT
+  TESTING
+  ACTIVE
+  ARCHIVED
+}
+
+enum WorkflowStatus {
+  ACTIVE
+  INACTIVE
+  DRAFT
+}
+
+enum ExecutionStatus {
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+  RETRYING
+}
+
+enum NotificationChannel {
+  IN_APP
+  EMAIL
+  WEBHOOK
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  READ
+  FAILED
+}
+
+enum IntegrationStatus {
+  CONNECTED
+  DISCONNECTED
+  ERROR
+  NEEDS_ATTENTION
+}
+
+enum IntegrationCategory {
+  CALENDAR
+  EMAIL
+  PAYMENTS
+  ANALYTICS
+  BOOKING
+  STORAGE
+  CRM
+  VIDEO
+  SEARCH
+}
+
+enum WebhookDeliveryStatus {
+  PENDING
+  DELIVERED
+  FAILED
+}
+
+enum TestimonialStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  PUBLISHED
+}
+
+enum TestimonialSource {
+  MANUAL
+  IMPORT
+  GOOGLE
+  PSYCHOLOGY_TODAY
+  OTHER
+}
+
+enum ExperimentStatus {
+  DRAFT
+  RUNNING
+  PAUSED
+  CONCLUDED_INSUFFICIENT_DATA
+  CONCLUDED
+}
+
+enum ExperimentType {
+  CTA
+  HEADLINE
+  LAYOUT
+  PLACEMENT
+  FORM
+}
+
+enum DomainVerificationStatus {
+  UNVERIFIED
+  PENDING
+  VERIFIED
+  FAILED
+}
+
+enum SslStatus {
+  PENDING
+  ACTIVE
+  EXPIRED
+  ERROR
+}
+
+enum SsoProvider {
+  GOOGLE
+  GITHUB
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CORE IDENTITY
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Tenant {
+  id     String       @id @default(cuid())
+  name   String
+  slug   String       @unique
+  status TenantStatus @default(TRIAL)
+
+  // White-label / custom domain
+  customDomain         String?                  @unique
+  domainVerifiedAt     DateTime?
+  domainVerification   DomainVerificationStatus @default(UNVERIFIED)
+  sslStatus            SslStatus                @default(PENDING)
+
+  // Branding (stored as JSON blob)
+  brandConfig Json?
+
+  // Billing
+  planId                  String  @default("starter")
+  stripeCustomerId        String?
+  stripeSubscriptionId    String?
+  trialEndsAt             DateTime?
+  billingEmail            String?
+
+  // Feature flag overrides (per-tenant)
+  featureOverrides Json?
+
+  // Metadata
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  members           TenantMembership[]
+  practices         Practice[]
+  services          Service[]
+  websites          Website[]
+  pages             Page[]
+  bookings          Booking[]
+  inquiries         Inquiry[]
+  intakeForms       IntakeForm[]
+  intakeSubmissions IntakeSubmission[]
+  knowledgeItems    KnowledgeItem[]
+  documents         Document[]
+  aiConversations   AiConversation[]
+  aiActions         AiAction[]
+  analyticsEvents   AnalyticsEvent[]
+  analyticsSessions AnalyticsSession[]
+  workflows         Workflow[]
+  workflowExecs     WorkflowExecution[]
+  notifications     Notification[]
+  integrations      Integration[]
+  apiKeys           ApiKey[]
+  webhookEndpoints  WebhookEndpoint[]
+  webhookDeliveries WebhookDelivery[]
+  auditLogs         AuditLog[]
+  testimonials      Testimonial[]
+  experiments       Experiment[]
+  mediaItems        MediaItem[]
+
+  @@index([slug])
+  @@index([customDomain])
+  @@index([status])
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  emailVerified DateTime?
+  passwordHash  String?
+  name          String?
+  avatarUrl     String?
+  timezone      String    @default("UTC")
+  locale        String    @default("en")
+  isSuperAdmin  Boolean   @default(false)
+
+  // MFA (architecture-ready)
+  mfaEnabled  Boolean @default(false)
+  mfaSecret   String?
+  backupCodes Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  memberships   TenantMembership[]
+  sessions      UserSession[]
+  auditLogs     AuditLog[]
+  aiActions     AiAction[]
+  notifications Notification[]
+  ssoAccounts   SsoAccount[]
+
+  @@index([email])
+}
+
+model SsoAccount {
+  id           String      @id @default(cuid())
+  userId       String
+  provider     SsoProvider
+  providerAccountId String
+  accessToken  String?
+  refreshToken String?
+  expiresAt    DateTime?
+  createdAt    DateTime    @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model TenantMembership {
+  id       String     @id @default(cuid())
+  tenantId String
+  userId   String
+  role     MemberRole @default(VIEWER)
+
+  // Invite lifecycle
+  inviteToken    String?      @unique
+  inviteStatus   InviteStatus @default(ACCEPTED)
+  invitedByEmail String?
+  invitedAt      DateTime?
+  joinedAt       DateTime?
+
+  // Notification preferences (stored as JSON)
+  notificationPreferences Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, userId])
+  @@index([userId])
+  @@index([inviteToken])
+}
+
+model UserSession {
+  id           String   @id @default(cuid())
+  userId       String
+  tokenHash    String   @unique // SHA-256 of actual token
+  tokenPrefix  String            // First 8 chars for display
+  expiresAt    DateTime
+  ipAddress    String?
+  userAgent    String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  lastActiveAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([tokenHash])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PRACTICE
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Practice {
+  id       String         @id @default(cuid())
+  tenantId String         @unique // One practice per tenant (v1)
+  name     String
+  slug     String         @unique
+  type     PracticeType   @default(INDIVIDUAL)
+  status   PracticeStatus @default(ACTIVE)
+
+  description   String?
+  tagline       String?
+  phone         String?
+  email         String?
+  websiteUrl    String?
+
+  // Address as structured JSON
+  address Json? // { street, city, state, zip, country, lat, lng }
+
+  timezone String @default("America/New_York")
+  locale   String @default("en")
+
+  // Operating hours
+  operatingHours Json? // { monday: { open, close }, ... }
+
+  // SEO
+  seoTitle       String?
+  seoDescription String?
+  seoKeywords    String[]
+
+  // Social
+  socialLinks Json? // { facebook, instagram, linkedin, twitter, youtube }
+
+  // Onboarding state
+  onboardingCompleted Boolean  @default(false)
+  onboardingStep      Int      @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  tenant       Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  services     Service[]
+  websites     Website[]
+  bookings     Booking[]
+  inquiries    Inquiry[]
+  intakeForms  IntakeForm[]
+  knowledgeItems KnowledgeItem[]
+  documents    Document[]
+  testimonials Testimonial[]
+  experiments  Experiment[]
+  mediaItems   MediaItem[]
+
+  @@index([tenantId])
+  @@index([slug])
+}
+
+model Service {
+  id         String      @id @default(cuid())
+  tenantId   String
+  practiceId String
+  name       String
+  slug       String
+  type       ServiceType @default(INDIVIDUAL)
+
+  description      String?
+  shortDescription String?
+  category         String?
+
+  // Scheduling
+  duration  Int    // minutes
+  price     Float?
+  currency  String @default("USD")
+
+  // Display
+  isActive      Boolean @default(true)
+  displayOrder  Int     @default(0)
+  imageUrl      String?
+  color         String? // For calendar display
+
+  // SEO
+  seoTitle       String?
+  seoDescription String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant   Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  practice Practice @relation(fields: [practiceId], references: [id], onDelete: Cascade)
+  bookings Booking[]
+
+  @@unique([practiceId, slug])
+  @@index([tenantId])
+  @@index([practiceId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// WEBSITE & CMS
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Website {
+  id         String        @id @default(cuid())
+  tenantId   String
+  practiceId String
+  status     WebsiteStatus @default(DRAFT)
+
+  // Domain
+  subdomain     String  @unique // practice.theraflow.app
+  customDomain  String? @unique
+  primaryDomain String? // Which one is canonical
+
+  // Versioning
+  currentVersion  Int @default(1)
+  publishedVersion Int?
+
+  // Settings stored as JSON
+  settings Json? // { favicon, scripts, cookieBanner, privacySettings, ... }
+
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  tenant      Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  practice    Practice     @relation(fields: [practiceId], references: [id], onDelete: Cascade)
+  pages       Page[]
+  experiments Experiment[]
+  analyticsSessions AnalyticsSession[]
+  analyticsEvents   AnalyticsEvent[]
+
+  @@index([tenantId])
+  @@index([subdomain])
+  @@index([customDomain])
+}
+
+model Page {
+  id        String        @id @default(cuid())
+  tenantId  String
+  websiteId String
+  title     String
+  slug      String
+  type      PageType      @default(CUSTOM)
+  status    ContentStatus @default(DRAFT)
+
+  // Content: array of section objects
+  // [{ id, type, data, settings }]
+  content Json?
+
+  // SEO
+  seoTitle       String?
+  seoDescription String?
+  seoKeywords    String[]
+  ogTitle        String?
+  ogDescription  String?
+  ogImage        String?
+
+  // Canonical
+  canonicalUrl String?
+
+  // Versioning
+  version          Int     @default(1)
+  publishedVersion Int?
+
+  // Flags
+  isHomepage   Boolean @default(false)
+  displayOrder Int     @default(0)
+  isIndexable  Boolean @default(true)
+
+  // Authorship
+  authorId   String?
+  reviewerId String?
+
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  tenant   Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  website  Website     @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  versions PageVersion[]
+
+  @@unique([websiteId, slug])
+  @@index([tenantId])
+  @@index([websiteId])
+  @@index([type])
+  @@index([status])
+}
+
+model PageVersion {
+  id     String @id @default(cuid())
+  pageId String
+  tenantId String
+
+  version    Int
+  content    Json
+  seoData    Json?
+  changeNote String?
+
+  createdById String?
+  createdAt   DateTime @default(now())
+
+  page Page @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  @@unique([pageId, version])
+  @@index([pageId])
+  @@index([tenantId])
+}
+
+model MediaItem {
+  id         String @id @default(cuid())
+  tenantId   String
+  practiceId String?
+
+  name         String
+  originalName String
+  mimeType     String
+  size         Int    // bytes
+  width        Int?
+  height       Int?
+
+  // Storage
+  storageKey      String
+  storageProvider String @default("local") // local | s3 | r2
+  url             String
+
+  // Metadata
+  altText     String?
+  caption     String?
+  usageCount  Int     @default(0)
+
+  uploadedById String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  tenant   Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  practice Practice? @relation(fields: [practiceId], references: [id])
+
+  @@index([tenantId])
+  @@index([practiceId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BOOKINGS
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Booking {
+  id         String        @id @default(cuid())
+  tenantId   String
+  practiceId String
+  serviceId  String?
+
+  // Client
+  clientName  String
+  clientEmail String
+  clientPhone String?
+
+  // Appointment
+  startTime DateTime
+  endTime   DateTime
+  timezone  String
+
+  status    BookingStatus @default(PENDING)
+  notes     String?
+  internalNotes String?
+
+  // Idempotency
+  idempotencyKey String @unique @default(cuid())
+
+  // External booking provider
+  externalBookingId String?
+  providerName      String?
+
+  // Lifecycle
+  confirmedAt  DateTime?
+  cancelledAt  DateTime?
+  cancelReason String?
+  completedAt  DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant   Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  practice Practice @relation(fields: [practiceId], references: [id])
+  service  Service? @relation(fields: [serviceId], references: [id])
+  intakeSubmissions IntakeSubmission[]
+
+  @@index([tenantId])
+  @@index([practiceId])
+  @@index([clientEmail])
+  @@index([status])
+  @@index([startTime])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INQUIRY CRM
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Inquiry {
+  id         String        @id @default(cuid())
+  tenantId   String
+  practiceId String
+
+  // Contact
+  name    String
+  email   String
+  phone   String?
+  subject String?
+  message String
+
+  // Classification
+  status InquiryStatus @default(NEW)
+  intent InquiryIntent @default(INFORMATION)
+  source InquirySource @default(WEBSITE)
+
+  // Assignment
+  assignedToId String?
+
+  // Metadata
+  ipAddress String?
+  userAgent String?
+  tags      String[]
+  notes     String?
+
+  firstRepliedAt DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  tenant   Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  practice Practice @relation(fields: [practiceId], references: [id])
+
+  @@index([tenantId])
+  @@index([practiceId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INTAKE FORMS
+// ─────────────────────────────────────────────────────────────────────────────
+
+model IntakeForm {
+  id         String        @id @default(cuid())
+  tenantId   String
+  practiceId String
+  name       String
+  description String?
+
+  // Fields: [{ id, type, label, required, options, validation }]
+  fields    Json
+  status    ContentStatus @default(DRAFT)
+  isDefault Boolean       @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant      Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  practice    Practice          @relation(fields: [practiceId], references: [id])
+  submissions IntakeSubmission[]
+
+  @@index([tenantId])
+  @@index([practiceId])
+}
+
+model IntakeSubmission {
+  id         String @id @default(cuid())
+  tenantId   String
+  formId     String
+  bookingId  String?
+
+  respondentEmail String?
+  respondentName  String?
+
+  // Responses stored encrypted
+  responses Json
+
+  status ContentStatus @default(DRAFT)
+
+  submittedAt DateTime  @default(now())
+  reviewedAt  DateTime?
+  reviewedById String?
+
+  createdAt DateTime @default(now())
+
+  tenant  Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  form    IntakeForm @relation(fields: [formId], references: [id])
+  booking Booking?   @relation(fields: [bookingId], references: [id])
+
+  @@index([tenantId])
+  @@index([formId])
+  @@index([bookingId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// AI & KNOWLEDGE
+// ─────────────────────────────────────────────────────────────────────────────
+
+model KnowledgeItem {
+  id         String          @id @default(cuid())
+  tenantId   String
+  practiceId String
+  type       KnowledgeType   @default(GENERAL)
+  source     KnowledgeSource @default(MANUAL)
+
+  title   String
+  content String
+  status  KnowledgeStatus @default(DRAFT)
+
+  version  Int    @default(1)
+  ownerId  String?
+
+  // Vector embedding reference
+  embeddingId String?
+
+  approvedById String?
+  approvedAt   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant   Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  practice Practice @relation(fields: [practiceId], references: [id])
+
+  @@index([tenantId])
+  @@index([practiceId])
+  @@index([status])
+  @@index([type])
+}
+
+model Document {
+  id         String @id @default(cuid())
+  tenantId   String
+  practiceId String
+
+  name         String
+  originalName String
+  mimeType     String
+  size         Int
+
+  // Storage
+  storageKey      String
+  storageProvider String @default("local")
+
+  // Processing pipeline
+  processingStatus DocumentProcessingStatus @default(PENDING)
+  extractedText    String?
+  chunkCount       Int?
+
+  // Safety
+  virusScanStatus VirusScanStatus @default(PENDING)
+  isPublic        Boolean         @default(false)
+
+  uploadedById String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  tenant   Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  practice Practice @relation(fields: [practiceId], references: [id])
+
+  @@index([tenantId])
+  @@index([practiceId])
+  @@index([processingStatus])
+}
+
+model AiConversation {
+  id         String             @id @default(cuid())
+  tenantId   String
+  type       AiConversationType @default(VISITOR_CHAT)
+  practiceId String?
+  userId     String? // Admin conversations
+  visitorSessionId String? // Anonymous visitor conversations
+
+  // Messages: [{ role, content, toolCalls, metadata, timestamp }]
+  messages Json @default("[]")
+
+  // Provider details
+  model    String?
+  provider String?
+
+  // Cost tracking
+  totalTokens   Int?
+  estimatedCost Float?
+
+  status    String   @default("ACTIVE")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant  Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  actions AiAction[]
+
+  @@index([tenantId])
+  @@index([practiceId])
+  @@index([userId])
+  @@index([type])
+}
+
+model AiAction {
+  id             String        @id @default(cuid())
+  tenantId       String
+  practiceId     String?
+  conversationId String?
+  userId         String
+
+  type   String        // UPDATE_PAGE, PUBLISH_PAGE, CREATE_SERVICE, etc.
+  status AiActionStatus @default(PENDING)
+
+  // AI's plan for what it will do
+  plan Json?
+
+  // Before/after preview for user review
+  preview Json?
+
+  // Result after execution
+  result Json?
+
+  rejectionReason String?
+
+  approvedAt  DateTime?
+  executedAt  DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  tenant       Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  conversation AiConversation? @relation(fields: [conversationId], references: [id])
+  user         User           @relation(fields: [userId], references: [id])
+
+  @@index([tenantId])
+  @@index([userId])
+  @@index([status])
+}
+
+model PromptVersion {
+  id  String @id @default(cuid())
+  key String // e.g. visitor-assistant
+
+  name           String
+  description    String?
+  promptTemplate String
+  systemPrompt   String?
+  model          String  @default("gpt-4o-mini")
+  provider       String  @default("openai")
+
+  version Int
+  status  PromptStatus @default(DRAFT)
+
+  evaluationScore Float?
+  ownerId         String?
+  notes           String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([key, version])
+  @@index([key])
+  @@index([status])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ANALYTICS
+// ─────────────────────────────────────────────────────────────────────────────
+
+model AnalyticsEvent {
+  id        String @id @default(cuid())
+  tenantId  String
+  websiteId String?
+
+  // Anonymous session/visitor IDs (hashed)
+  sessionId String?
+  visitorId String?
+
+  type String // pageview, cta_click, booking_start, booking_complete, form_abandon...
+  page     String?
+  referrer String?
+
+  properties Json? // Event-specific data
+
+  // Privacy compliance
+  isAnonymized Boolean @default(true)
+
+  timestamp DateTime @default(now())
+
+  tenant  Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  website Website? @relation(fields: [websiteId], references: [id])
+
+  @@index([tenantId, timestamp])
+  @@index([type, timestamp])
+  @@index([websiteId, timestamp])
+}
+
+model AnalyticsSession {
+  id        String @id @default(cuid())
+  tenantId  String
+  websiteId String?
+
+  visitorId String // Hashed, anonymous
+  startedAt DateTime @default(now())
+  endedAt   DateTime?
+
+  pageCount Int @default(0)
+  duration  Int? // seconds
+
+  entryPage String?
+  exitPage  String?
+  referrer  String?
+  utm       Json? // { source, medium, campaign, content, term }
+
+  // Device info
+  device  String? // mobile | tablet | desktop
+  browser String?
+  os      String?
+
+  // Geo (only if consent given)
+  country String?
+  city    String?
+
+  tenant  Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  website Website? @relation(fields: [websiteId], references: [id])
+
+  @@index([tenantId])
+  @@index([websiteId])
+  @@index([startedAt])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// AUTOMATION
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Workflow {
+  id       String         @id @default(cuid())
+  tenantId String
+  name     String
+  description String?
+  status   WorkflowStatus @default(DRAFT)
+
+  // Trigger: { type: 'NEW_INQUIRY' | 'BOOKING_CREATED' | 'SEO_SCORE_DROP' | ..., config: {} }
+  trigger Json
+
+  // Conditions: [{ field, operator, value }]
+  conditions Json @default("[]")
+
+  // Actions: [{ type, config }]
+  actions Json @default("[]")
+
+  // Execution stats
+  runCount      Int       @default(0)
+  lastRunAt     DateTime?
+  lastRunStatus String?
+
+  createdById String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant     Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  executions WorkflowExecution[]
+
+  @@index([tenantId])
+  @@index([status])
+}
+
+model WorkflowExecution {
+  id         String @id @default(cuid())
+  workflowId String
+  tenantId   String
+
+  status ExecutionStatus @default(RUNNING)
+
+  // Data that triggered this execution
+  triggerData Json?
+
+  // Step-by-step execution log
+  executionLog Json @default("[]")
+
+  startedAt   DateTime  @default(now())
+  completedAt DateTime?
+  errorMessage String?
+
+  // Prevent duplicate executions
+  idempotencyKey String? @unique
+
+  workflow Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  tenant   Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([workflowId])
+  @@index([tenantId])
+  @@index([status])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// NOTIFICATIONS & INTEGRATIONS
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Notification {
+  id       String              @id @default(cuid())
+  tenantId String
+  userId   String
+
+  type    String
+  title   String
+  message String
+  data    Json?   // Context for deep linking
+
+  channel NotificationChannel @default(IN_APP)
+  status  NotificationStatus  @default(PENDING)
+
+  readAt  DateTime?
+  sentAt  DateTime?
+
+  createdAt DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, userId])
+  @@index([userId, status])
+  @@index([createdAt])
+}
+
+model Integration {
+  id       String              @id @default(cuid())
+  tenantId String
+  provider String              // google_calendar, stripe, mailchimp...
+  category IntegrationCategory
+
+  status IntegrationStatus @default(DISCONNECTED)
+
+  // Config (non-sensitive settings)
+  config Json?
+
+  // Credentials (sensitive, should be encrypted at application layer)
+  credentials Json?
+
+  lastSyncAt      DateTime?
+  lastErrorAt     DateTime?
+  lastErrorMessage String?
+
+  createdById String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, provider])
+  @@index([tenantId])
+}
+
+model ApiKey {
+  id       String @id @default(cuid())
+  tenantId String
+  userId   String
+
+  name      String
+  keyHash   String   @unique // SHA-256, never store plain
+  keyPrefix String            // First 8 chars for display (tf_live_ab12...)
+
+  scopes    String[] // website:read, bookings:read, etc.
+  isActive  Boolean  @default(true)
+
+  lastUsedAt DateTime?
+  expiresAt  DateTime?
+
+  createdAt DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([keyHash])
+}
+
+model WebhookEndpoint {
+  id       String @id @default(cuid())
+  tenantId String
+
+  url         String
+  description String?
+  secret      String  // For HMAC signature verification
+
+  events   String[] // subscribed event types
+  isActive Boolean  @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant     Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  deliveries WebhookDelivery[]
+
+  @@index([tenantId])
+}
+
+model WebhookDelivery {
+  id         String @id @default(cuid())
+  webhookId  String
+  tenantId   String
+
+  event   String
+  payload Json
+
+  status         WebhookDeliveryStatus @default(PENDING)
+  responseStatus Int?
+  responseBody   String?
+
+  attempts    Int      @default(0)
+  nextRetryAt DateTime?
+  deliveredAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  webhook WebhookEndpoint @relation(fields: [webhookId], references: [id], onDelete: Cascade)
+  tenant  Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([webhookId])
+  @@index([tenantId])
+  @@index([status])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// AUDIT & SECURITY
+// ─────────────────────────────────────────────────────────────────────────────
+
+model AuditLog {
+  id       String @id @default(cuid())
+  tenantId String
+
+  userId    String?
+  userEmail String? // Denormalized for historical reference
+
+  action       String // PAGE_PUBLISHED, BOOKING_CANCELLED, MEMBER_ADDED...
+  resourceType String?
+  resourceId   String?
+
+  oldValue Json?
+  newValue Json?
+
+  ipAddress String?
+  userAgent String?
+  metadata  Json?
+
+  // Immutable: never updated after creation
+  createdAt DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User?  @relation(fields: [userId], references: [id])
+
+  @@index([tenantId, createdAt])
+  @@index([userId])
+  @@index([resourceType, resourceId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CONTENT & MARKETING
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Testimonial {
+  id         String @id @default(cuid())
+  tenantId   String
+  practiceId String
+
+  authorName  String
+  authorTitle String?
+  content     String
+  rating      Int?   // 1-5
+
+  source TestimonialSource @default(MANUAL)
+  status TestimonialStatus @default(PENDING)
+
+  // Consent tracking
+  consentGiven Boolean   @default(false)
+  consentDate  DateTime?
+
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  tenant   Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  practice Practice @relation(fields: [practiceId], references: [id])
+
+  @@index([tenantId])
+  @@index([status])
+}
+
+model Experiment {
+  id         String         @id @default(cuid())
+  tenantId   String
+  websiteId  String?
+  practiceId String?
+  name       String
+  hypothesis String?
+  type       ExperimentType @default(CTA)
+  status     ExperimentStatus @default(DRAFT)
+
+  targetPage    String?
+  targetElement String?
+
+  // Variants: [{ id, name, value, weight }]
+  variants Json @default("[]")
+
+  // Metrics to track
+  metrics Json @default("[]")
+
+  startedAt   DateTime?
+  endedAt     DateTime?
+  conclusion  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant   Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  website  Website?  @relation(fields: [websiteId], references: [id])
+  practice Practice? @relation(fields: [practiceId], references: [id])
+
+  @@index([tenantId])
+  @@index([status])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BILLING
+// ─────────────────────────────────────────────────────────────────────────────
+
+model SubscriptionPlan {
+  id   String @id @default(cuid())
+  name String
+  slug String @unique
+
+  price    Float
+  currency String @default("USD")
+  interval String @default("month") // month | year
+
+  // Entitlements as JSON
+  features Json
+
+  isActive       Boolean @default(true)
+  stripePriceId  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slug])
+}
