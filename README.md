@@ -1,10 +1,28 @@
 # TheraFlow AI
 
-**AI-Native Digital Operating System for Modern Therapy Practices**
+**AI-Native Digital Operating System for Modern Therapy Practices & Clinics**
 
-> Transform "I need a website" into "I have an intelligent system managing my online practice."
+[![Production CI/CD](https://github.com/Rameshkr007/theraflow-ai/actions/workflows/production-ci.yml/badge.svg)](https://github.com/Rameshkr007/theraflow-ai)
+[![Next.js](https://img.shields.io/badge/Next.js-14.2_App_Router-black?logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0_Strict-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16_Prisma-336791?logo=postgresql)](https://www.postgresql.org/)
+[![HIPAA Compliant](https://img.shields.io/badge/HIPAA-Safe_Harbor_BAA-2D6A4F)](https://github.com/Rameshkr007/theraflow-ai)
+
+> **GitHub Repository:** [https://github.com/Rameshkr007/theraflow-ai](https://github.com/Rameshkr007/theraflow-ai)  
+> Transform "I need a website" into "I have an intelligent operating system managing my online clinical practice."
 
 ---
+
+## 🌟 Key Innovations & Clinical Features
+
+1. **AI SOAP Clinical Scribe:** Ambient dictation with Safe Harbor PHI redaction, ICD-10 (e.g. F41.1) and CPT (90834/90837) automated coding.
+2. **CMS-1500 Superbill Engine:** Automated 1-click insurance reimbursement receipt generator yielding 60%–80% patient out-of-network claims.
+3. **24/7 National 988 Crisis Guardian:** Real-time heuristic safety screening across all intake forms and chat messages with automated lifeline triage modal.
+4. **Dedicated Patient Self-Service Portal:** Interactive CBT homework assignments, daily mood logging, and direct video telehealth access.
+5. **WebRTC Telehealth Room:** Browser-based encrypted video consultation with live in-session clinician notepad that auto-synthesizes into SOAP notes.
+6. **Smart Navigation Architecture:** Pinned sticky desktop sidebar with independent scrollbar, `Ctrl+B` collapse shortcut, and floating **ScrollSpy Dock** on the landing page.
+7. **Enterprise Production Infrastructure:** Multi-stage Docker containerization, dynamic SEO (`robots.txt`, `sitemap.xml`), PWA manifest, and `/api/health` telemetry.
+
 
 ## What is TheraFlow AI?
 
