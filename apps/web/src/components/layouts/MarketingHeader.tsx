@@ -47,14 +47,27 @@ export default function MarketingHeader() {
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
-          <Link href="/onboarding" className="text-xs font-medium px-3 py-1.5 rounded-full border border-primary/30 text-primary bg-primary/5 hover:bg-primary/10 transition-colors">
-            Onboarding Wizard
+          <Link
+            href="/login"
+            className="text-xs font-semibold px-3 py-1.5 rounded-full border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 bg-emerald-50/60 dark:bg-emerald-950/40 hover:bg-emerald-100/60 transition-all flex items-center gap-1.5 shadow-xs"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span>Live Demo</span>
           </Link>
-          <Link href="/login" className="text-sm font-medium hover:text-primary transition-colors">
+          <Link
+            href="/onboarding"
+            className="text-xs font-medium px-3 py-1.5 rounded-md hover:bg-muted text-foreground transition-colors"
+          >
+            10-Step Wizard
+          </Link>
+          <Link href="/login" className="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors">
             Sign In
           </Link>
-          <Link href="/register" className="px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-md hover:bg-primary/90 transition-colors shadow-sm">
-            Start Free Trial
+          <Link
+            href="/register"
+            className="px-4 py-2 bg-primary text-primary-foreground text-xs font-semibold rounded-lg hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-md shadow-primary/20"
+          >
+            Get Started Free
           </Link>
         </div>
 
