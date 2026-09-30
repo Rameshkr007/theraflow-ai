@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React from 'react';
 import Link from 'next/link';
@@ -21,14 +21,21 @@ export default function MarketingPage() {
             TheraFlow replaces 5 different tools with one seamless, AI-powered platform designed specifically for modern therapy practices.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/register" className="w-full sm:w-auto px-8 py-3.5 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-colors">
+            <Link href="/register" className="w-full sm:w-auto px-8 py-3.5 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-colors shadow-md text-center">
               Start for free
             </Link>
-            <Link href="#demo" className="w-full sm:w-auto px-8 py-3.5 bg-background border border-input text-foreground rounded-lg font-semibold hover:bg-muted transition-colors flex items-center justify-center gap-2">
+            <Link href="/login" className="w-full sm:w-auto px-7 py-3.5 bg-primary/10 border border-primary/30 text-primary rounded-lg font-semibold hover:bg-primary/20 transition-colors flex items-center justify-center gap-2">
+              <Sparkles className="w-4 h-4" />
+              Launch Demo Practice
+            </Link>
+            <Link href="/onboarding" className="w-full sm:w-auto px-6 py-3.5 bg-background border border-input text-foreground rounded-lg font-semibold hover:bg-muted transition-colors flex items-center justify-center gap-2">
               <Play className="w-4 h-4" />
-              See how it works
+              10-Step Onboarding
             </Link>
           </div>
+          <p className="text-xs text-muted-foreground mt-4">
+            ✨ Seeded demo practice: <strong>Willow & Mind Therapy</strong> (Austin, TX) with AI copilot, client bookings, and clinical intake.
+          </p>
         </div>
         
         {/* Hero Dashboard Mockup */}

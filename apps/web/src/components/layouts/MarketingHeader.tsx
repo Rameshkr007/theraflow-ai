@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 'use client';
 
@@ -46,11 +46,14 @@ export default function MarketingHeader() {
           ))}
         </nav>
 
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-3">
+          <Link href="/onboarding" className="text-xs font-medium px-3 py-1.5 rounded-full border border-primary/30 text-primary bg-primary/5 hover:bg-primary/10 transition-colors">
+            Onboarding Wizard
+          </Link>
           <Link href="/login" className="text-sm font-medium hover:text-primary transition-colors">
             Sign In
           </Link>
-          <Link href="/register" className="px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-md hover:bg-primary/90 transition-colors">
+          <Link href="/register" className="px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-md hover:bg-primary/90 transition-colors shadow-sm">
             Start Free Trial
           </Link>
         </div>
