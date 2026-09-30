@@ -22,11 +22,11 @@ export default function MarketingPage() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/register" className="w-full sm:w-auto px-8 py-3.5 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-colors shadow-md text-center">
-              Start for free
+              Get Started Free
             </Link>
             <Link href="/login" className="w-full sm:w-auto px-7 py-3.5 bg-primary/10 border border-primary/30 text-primary rounded-lg font-semibold hover:bg-primary/20 transition-colors flex items-center justify-center gap-2">
               <Sparkles className="w-4 h-4" />
-              Launch Demo Practice
+              1-Click Demo Practice
             </Link>
             <Link href="/onboarding" className="w-full sm:w-auto px-6 py-3.5 bg-background border border-input text-foreground rounded-lg font-semibold hover:bg-muted transition-colors flex items-center justify-center gap-2">
               <Play className="w-4 h-4" />
@@ -40,10 +40,16 @@ export default function MarketingPage() {
         
         {/* Hero Dashboard Mockup */}
         <div className="container mx-auto mt-16 max-w-5xl">
-          <div className="aspect-video bg-muted border border-border rounded-xl shadow-2xl overflow-hidden relative flex items-center justify-center">
+          <Link href="/dashboard" className="block aspect-video bg-muted border border-border rounded-xl shadow-2xl overflow-hidden relative group cursor-pointer hover:border-primary/50 transition-all">
             <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-primary/20" />
-            <span className="text-muted-foreground font-medium text-lg relative z-10">Dashboard Mockup</span>
-          </div>
+            <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10 space-y-3">
+              <span className="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-primary text-primary-foreground shadow-sm">
+                Click to Open Live Practice Dashboard
+              </span>
+              <p className="text-2xl md:text-3xl font-serif font-bold text-foreground">Willow & Mind Therapy · Operating Suite</p>
+              <p className="text-xs text-muted-foreground max-w-md">Real-time bookings, AI clinical scribe, CMS-1500 superbills, and 988 emergency protocols.</p>
+            </div>
+          </Link>
         </div>
       </section>
 
@@ -144,9 +150,9 @@ export default function MarketingPage() {
                     <div className="w-1.5 h-1.5 rounded-full bg-primary" /> Support
                   </li>
                 </ul>
-                <button className="w-full py-2 border border-primary text-primary rounded-md font-medium hover:bg-primary/10 transition-colors">
+                <Link href="/register" className="w-full py-2 border border-primary text-primary text-center rounded-md font-medium hover:bg-primary/10 transition-colors">
                   Choose {plan}
-                </button>
+                </Link>
               </div>
             ))}
           </div>
