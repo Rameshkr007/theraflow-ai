@@ -1,10 +1,12 @@
+﻿"use client";
+
 'use client';
 
 import React, { useState } from 'react';
 import DashboardSidebar from './DashboardSidebar';
 import DashboardTopBar from './DashboardTopBar';
 import CommandPalette from '../dashboard/CommandPalette';
-import { cn } from '@lib/utils';
+import { cn } from '@/lib/utils';
 
 export default function DashboardShell({ children }: { children: React.ReactNode }) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);

@@ -1,6 +1,6 @@
-import React from 'react';
-import MarketingHeader from '@components/layouts/MarketingHeader';
-import MarketingFooter from '@components/layouts/MarketingFooter';
+﻿import React from 'react';
+import MarketingHeader from '@/components/layouts/MarketingHeader';
+import MarketingFooter from '@/components/layouts/MarketingFooter';
 
 export default function MarketingLayout({
   children,

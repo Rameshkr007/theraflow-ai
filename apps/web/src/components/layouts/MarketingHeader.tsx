@@ -1,9 +1,11 @@
+﻿"use client";
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Leaf, Menu, X } from 'lucide-react';
-import { cn } from '@lib/utils';
+import { cn } from '@/lib/utils';
 
 export default function MarketingHeader() {
   const [isScrolled, setIsScrolled] = useState(false);

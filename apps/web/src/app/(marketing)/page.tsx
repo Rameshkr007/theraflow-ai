@@ -1,3 +1,5 @@
+﻿"use client";
+
 import React from 'react';
 import Link from 'next/link';
 import { Play, Sparkles, Calendar, MessageSquare, Brain, Search, BarChart3, ArrowRight } from 'lucide-react';

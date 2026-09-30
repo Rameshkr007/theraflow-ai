@@ -1,9 +1,11 @@
+﻿"use client";
+
 'use client';
 
 import React, { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Menu, Search, Bell, User } from 'lucide-react';
-import { cn } from '@lib/utils';
+import { cn } from '@/lib/utils';
 
 export default function DashboardTopBar({ onMenuClick }: { onMenuClick: () => void }) {
   const pathname = usePathname();
@@ -34,7 +36,7 @@ export default function DashboardTopBar({ onMenuClick }: { onMenuClick: () => vo
         >
           <Search className="w-4 h-4" />
           <span>Search...</span>
-          <kbd className="ml-4 px-1.5 py-0.5 rounded text-[10px] font-medium bg-background border border-border">⌘K</kbd>
+          <kbd className="ml-4 px-1.5 py-0.5 rounded text-[10px] font-medium bg-background border border-border">âŒ˜K</kbd>
         </button>
 
         <button className="relative p-2 text-muted-foreground hover:text-foreground transition-colors">

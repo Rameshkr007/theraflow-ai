@@ -1,3 +1,5 @@
+﻿"use client";
+
 import React from 'react';
 import { Calendar, Users, Globe, Brain, Plus, UserPlus, BarChart } from 'lucide-react';
 

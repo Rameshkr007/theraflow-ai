@@ -1,3 +1,5 @@
+﻿"use client";
+
 import React from 'react';
 import { FunnelExplorer } from '@/components/analytics/FunnelExplorer';
 import { PrivacySettings } from '@/components/analytics/PrivacySettings';

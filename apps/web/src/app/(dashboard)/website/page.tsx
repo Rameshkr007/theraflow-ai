@@ -1,3 +1,5 @@
+﻿"use client";
+
 import React from 'react';
 import { Globe, Plus, Palette, Settings, ExternalLink, CheckCircle2, Clock, AlertCircle } from 'lucide-react';
 

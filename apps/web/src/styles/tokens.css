@@ -4,12 +4,7 @@
    Never hardcode color, spacing, or radius values.
    ───────────────────────────────────────────────────────────────────────────── */
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer base {
-  :root {
+:root {
     /* ── Brand Colors ────────────────────────────────────────────────────────── */
     --color-primary: 45 106 79;           /* #2D6A4F – deep forest green */
     --color-primary-light: 82 183 136;    /* #52B788 */
@@ -178,4 +173,4 @@
     --color-border-subtle: 30 33 36;
   }
   */
-}
+

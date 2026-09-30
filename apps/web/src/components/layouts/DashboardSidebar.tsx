@@ -1,9 +1,11 @@
+﻿"use client";
+
 'use client';
 
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { cn } from '@lib/utils';
+import { cn } from '@/lib/utils';
 import { 
   LayoutDashboard, Building2, Globe, FileText, Palette, Image, 
   Calendar, MessageSquare, ClipboardList, PenTool, Star, Sparkles, 

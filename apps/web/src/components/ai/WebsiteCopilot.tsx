@@ -1,3 +1,5 @@
+﻿"use client";
+
 'use client';
 
 import React, { useState } from 'react';
@@ -12,14 +14,14 @@ export function WebsiteCopilot() {
         onClick={() => setIsOpen(true)}
         className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg bg-indigo-600 hover:bg-indigo-700 flex items-center justify-center text-white z-50"
       >
-        ✨
+        âœ¨
       </Button>
 
       {isOpen && (
         <div className="fixed inset-y-0 right-0 w-96 bg-white shadow-2xl z-50 flex flex-col border-l">
           <div className="p-4 border-b flex justify-between items-center bg-indigo-50">
             <h3 className="font-bold text-indigo-900">Website Copilot</h3>
-            <button onClick={() => setIsOpen(false)} className="text-gray-500 hover:text-gray-800">×</button>
+            <button onClick={() => setIsOpen(false)} className="text-gray-500 hover:text-gray-800">Ã—</button>
           </div>
           
           <div className="flex-1 p-4 overflow-y-auto">
@@ -36,7 +38,7 @@ export function WebsiteCopilot() {
             </div>
             <div className="flex gap-2">
               <input type="text" placeholder="Ask copilot..." className="flex-1 border rounded p-2 text-sm" />
-              <Button size="sm">→</Button>
+              <Button size="sm">â†’</Button>
             </div>
           </div>
         </div>

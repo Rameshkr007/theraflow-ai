@@ -1,3 +1,5 @@
+﻿"use client";
+
 'use client';
 
 import React, { useState } from 'react';
@@ -61,7 +63,7 @@ export default function InquiriesPage() {
 
               {/* AI Summary */}
               <div className="bg-indigo-50 border border-indigo-100 rounded-lg p-4 mb-6">
-                <div className="text-xs font-bold text-indigo-800 mb-1">✨ AI Summary</div>
+                <div className="text-xs font-bold text-indigo-800 mb-1">âœ¨ AI Summary</div>
                 <p className="text-sm text-indigo-900">
                   Client is seeking couples therapy and has availability on Tuesday evenings. They are asking about your sliding scale options.
                 </p>
