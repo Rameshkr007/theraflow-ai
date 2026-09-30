@@ -400,6 +400,153 @@ async function seedDemo() {
     },
   });
 
+  // ── Seed clinical documentation (SOAP Note) ──────────────────────────────
+  const existingNote = await db.clinicalNote.findFirst({
+    where: { tenantId: tenant.id },
+  });
+
+  let clinicalNote = existingNote;
+  if (!clinicalNote) {
+    clinicalNote = await db.clinicalNote.create({
+      data: {
+        tenantId: tenant.id,
+        clientName: "Elena Rodriguez",
+        clientEmail: "elena.r@example.com",
+        sessionDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+        durationMinutes: 50,
+        noteType: "SOAP",
+        subjective:
+          "Client presented on time via telehealth for session #4. Reports reduced panic attack frequency (down from 4/week to 1 this past week). Describes lingering anticipatory anxiety surrounding work presentations. Stated: 'I practiced the 4-7-8 breathing exercise before my Monday meeting and avoided having a full panic attack.' Sleep quality improved to 6.5 hours/night.",
+        objective:
+          "Client was alert, oriented x4, dressed casually with good eye contact. Speech was fluent with normal rate and volume. Affect was congruent with mood, mildly anxious when discussing professional performance but demonstrably calmer than intake session. No psychomotor agitation or retardation observed.",
+        assessment:
+          "32-year-old female presenting with Generalized Anxiety Disorder with panic features (ICD-10 F41.1). Demonstrating good engagement with cognitive restructuring and diaphragmatic breathing tools. Beck Anxiety Inventory score decreased from 28 (moderate-severe) to 19 (mild-moderate). Clinical progress is positive.",
+        plan:
+          "1. Continue weekly 50-minute CBT sessions.\n2. Homework: Complete 3 thought records identifying catastrophizing cognitive distortions around upcoming quarterly review.\n3. Continue twice-daily diaphragmatic breathing.\n4. Follow-up scheduled for next Tuesday at 2:00 PM.",
+        mentalStatusExam: {
+          appearance: "Appropriately groomed, casual attire",
+          mood: "Mildly anxious, hopeful",
+          affect: "Congruent, responsive",
+          thoughtProcess: "Logical, goal-directed, no loose associations",
+          cognition: "Intact memory and concentration",
+        },
+        diagnosisCodes: ["F41.1", "F43.22"],
+        procedureCodes: ["90834"],
+        riskLevel: "LOW",
+        homeworkAssigned: "CBT Thought Record (3 entries) + 4-7-8 breathing twice daily",
+        clinicalImpression: "Positive response to initial CBT phase; high insight and compliance.",
+        phiRedacted: true,
+        aiGenerated: true,
+        aiModelUsed: "gpt-4o-clinical-v2",
+        isSigned: true,
+        signedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000 + 3600000),
+        signedById: adminUser.id,
+        signatureText: "Dr. Sarah Bennett, PsyD, LPC #78291",
+      },
+    });
+  }
+
+  // ── Seed Superbill ────────────────────────────────────────────────────────
+  const existingSuperbill = await db.superbill.findFirst({
+    where: { tenantId: tenant.id },
+  });
+
+  if (!existingSuperbill) {
+    await db.superbill.create({
+      data: {
+        tenantId: tenant.id,
+        clinicalNoteId: clinicalNote?.id,
+        invoiceNumber: "SB-2026-0089",
+        clientName: "Elena Rodriguez",
+        clientEmail: "elena.r@example.com",
+        clientAddress: "1402 S Congress Ave, Austin, TX 78704",
+        clientDob: "1994-06-15",
+        providerName: "Dr. Sarah Bennett, PsyD",
+        providerNpi: "1841920394",
+        providerTaxId: "84-2910394",
+        providerAddress: "1204 San Antonio St, Suite 200, Austin, TX 78701",
+        serviceDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+        procedureCode: "90834",
+        procedureDescription: "Psychotherapy, 45-50 minutes, individual",
+        diagnosisCode: "F41.1",
+        secondaryDiagnosis: "F43.22",
+        amount: 175.0,
+        amountPaid: 175.0,
+        status: "ISSUED",
+        notes: "Paid in full via credit card. Standard CMS-1500 out-of-network claim receipt.",
+        issuedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000 + 4000000),
+      },
+    });
+  }
+
+  // ── Seed Client Portal User ───────────────────────────────────────────────
+  const existingPortalUser = await db.clientPortalUser.findFirst({
+    where: { tenantId: tenant.id },
+  });
+
+  if (!existingPortalUser) {
+    await db.clientPortalUser.create({
+      data: {
+        tenantId: tenant.id,
+        name: "Elena Rodriguez",
+        email: "elena.r@example.com",
+        phone: "(512) 555-0194",
+        passcodeHash: "$2a$12$eX8tA1sOmP7d3Q9yJ1K2L.abcdefghijklmnopqrstuvw",
+        sessionToken: "demo-portal-token-elena",
+        emergencyContact: {
+          name: "Carlos Rodriguez",
+          relationship: "Spouse",
+          phone: "(512) 555-0199",
+        },
+        assignedHomework: [
+          {
+            id: "hw-1",
+            title: "CBT Thought Record: Public Speaking",
+            description: "Record trigger, automatic thought, cognitive distortion, and rational response.",
+            completed: false,
+            dueDate: "2026-10-04",
+          },
+          {
+            id: "hw-2",
+            title: "Daily 4-7-8 Breathing Log",
+            description: "Practice diaphragmatic breathing for 5 minutes morning and evening.",
+            completed: true,
+            dueDate: "2026-09-29",
+          },
+        ],
+        moodCheckIns: [
+          { date: "2026-09-28", moodRating: 7, anxietyLevel: 4, note: "Calm morning, meeting went smoothly" },
+          { date: "2026-09-29", moodRating: 6, anxietyLevel: 5, note: "Slight anxiety before client presentation" },
+          { date: "2026-09-30", moodRating: 8, anxietyLevel: 3, note: "Felt confident and relaxed after exercise" },
+        ],
+      },
+    });
+  }
+
+  // ── Seed Crisis Alert ─────────────────────────────────────────────────────
+  const existingCrisis = await db.crisisAlert.findFirst({
+    where: { tenantId: tenant.id },
+  });
+
+  if (!existingCrisis) {
+    await db.crisisAlert.create({
+      data: {
+        tenantId: tenant.id,
+        source: "INTAKE",
+        severity: "MODERATE",
+        clientName: "David Miller",
+        clientContact: "david.m@example.com",
+        contentSnippet: "Past history of severe passive suicidal ideation during depressive episodes; denies current intent or active plan.",
+        detectedKeywords: ["suicidal ideation", "hopeless"],
+        riskScore: 0.65,
+        isResolved: true,
+        resolvedAt: new Date(Date.now() - 24 * 60 * 60 * 1000),
+        resolvedById: adminUser.id,
+        actionTaken: "Reviewed safety contract during intake, identified emergency contact and provided 988 Lifeline wallet card.",
+      },
+    });
+  }
+
   console.log("✅ Demo seed complete!");
   console.log("\n📋 Demo credentials:");
   console.log("   Email: sarah@willowmindtherapy.com");

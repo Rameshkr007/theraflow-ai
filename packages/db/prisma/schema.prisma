@@ -346,6 +346,10 @@ model Tenant {
   testimonials      Testimonial[]
   experiments       Experiment[]
   mediaItems        MediaItem[]
+  clinicalNotes     ClinicalNote[]
+  superbills        Superbill[]
+  clientPortalUsers ClientPortalUser[]
+  crisisAlerts      CrisisAlert[]
 
   @@index([slug])
   @@index([customDomain])
@@ -728,6 +732,8 @@ model Booking {
   practice Practice @relation(fields: [practiceId], references: [id])
   service  Service? @relation(fields: [serviceId], references: [id])
   intakeSubmissions IntakeSubmission[]
+  clinicalNotes     ClinicalNote[]
+  superbills        Superbill[]
 
   @@index([tenantId])
   @@index([practiceId])
@@ -1378,4 +1384,204 @@ model SubscriptionPlan {
   updatedAt DateTime @updatedAt
 
   @@index([slug])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CLINICAL DOCUMENTATION (SOAP / DAP) & AI SCRIBE
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum NoteType {
+  SOAP
+  DAP
+  PROGRESS
+  INTAKE_EVAL
+}
+
+enum ClinicalRiskLevel {
+  LOW
+  MODERATE
+  HIGH
+  CRISIS
+}
+
+model ClinicalNote {
+  id              String            @id @default(cuid())
+  tenantId        String
+  bookingId       String?
+  clientName      String
+  clientEmail     String?
+  sessionDate     DateTime          @default(now())
+  durationMinutes Int               @default(50)
+  noteType        NoteType          @default(SOAP)
+
+  // SOAP Components
+  subjective      String            @db.Text
+  objective       String            @db.Text
+  assessment      String            @db.Text
+  plan            String            @db.Text
+
+  // Clinical Details
+  mentalStatusExam   Json?
+  diagnosisCodes     String[]
+  procedureCodes     String[]
+  riskLevel          ClinicalRiskLevel @default(LOW)
+  homeworkAssigned   String?
+  clinicalImpression String?
+
+  // De-identification & AI Metadata
+  rawTranscript      String?           @db.Text
+  phiRedacted        Boolean           @default(true)
+  aiGenerated        Boolean           @default(false)
+  aiModelUsed        String?
+
+  // Attestation & Signature
+  isSigned           Boolean           @default(false)
+  signedAt           DateTime?
+  signedById         String?
+  signatureText      String?
+
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  tenant     Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  booking    Booking?      @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+  superbills Superbill[]
+
+  @@index([tenantId])
+  @@index([clientName])
+  @@index([sessionDate])
+  @@index([isSigned])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SUPERBILLS & OUT-OF-NETWORK REIMBURSEMENT
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum SuperbillStatus {
+  DRAFT
+  ISSUED
+  PAID
+  SUBMITTED
+  REIMBURSED
+}
+
+model Superbill {
+  id                   String          @id @default(cuid())
+  tenantId             String
+  bookingId            String?
+  clinicalNoteId       String?
+
+  invoiceNumber        String          @unique
+  clientName           String
+  clientEmail          String
+  clientAddress        String?
+  clientDob            String?
+
+  // Provider Info
+  providerName         String
+  providerNpi          String          // National Provider Identifier (10 digits)
+  providerTaxId        String          // EIN / SSN
+  providerAddress      String?
+
+  // Clinical Billing Details
+  serviceDate          DateTime
+  procedureCode        String          // CPT code (e.g. 90834)
+  procedureDescription String          @default("Psychotherapy, 45 minutes")
+  diagnosisCode        String          // Primary ICD-10 (e.g. F41.1)
+  secondaryDiagnosis   String?
+  amount               Float
+  amountPaid           Float
+  status               SuperbillStatus @default(DRAFT)
+  notes                String?
+
+  pdfUrl               String?
+  issuedAt             DateTime?
+  submittedAt          DateTime?
+
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
+
+  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  booking      Booking?      @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+  clinicalNote ClinicalNote? @relation(fields: [clinicalNoteId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId])
+  @@index([clientEmail])
+  @@index([status])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CLIENT PORTAL ACCESS & ENGAGEMENT
+// ─────────────────────────────────────────────────────────────────────────────
+
+model ClientPortalUser {
+  id               String    @id @default(cuid())
+  tenantId         String
+  name             String
+  email            String
+  phone            String?
+  passcodeHash     String?
+  sessionToken     String?   @unique
+  lastLoginAt      DateTime?
+  isActive         Boolean   @default(true)
+
+  emergencyContact Json?
+  assignedHomework Json?
+  moodCheckIns     Json?
+
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, email])
+  @@index([tenantId])
+  @@index([sessionToken])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CRISIS SAFETY GUARDIAN & 988 ALERTS
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum CrisisSeverity {
+  LOW
+  MODERATE
+  HIGH
+  IMMINENT
+}
+
+enum CrisisSource {
+  INQUIRY
+  INTAKE
+  CHAT
+  BOOKING
+  PORTAL
+}
+
+model CrisisAlert {
+  id               String         @id @default(cuid())
+  tenantId         String
+  source           CrisisSource
+  severity         CrisisSeverity
+  clientName       String?
+  clientContact    String?
+
+  contentSnippet   String         @db.Text
+  detectedKeywords String[]
+  riskScore        Float          @default(0.85)
+
+  // Resolution status
+  isResolved       Boolean        @default(false)
+  resolvedAt       DateTime?
+  resolvedById     String?
+  actionTaken      String?
+
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([severity])
+  @@index([isResolved])
 }

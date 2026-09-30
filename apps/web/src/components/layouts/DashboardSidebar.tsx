@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 'use client';
 
@@ -11,7 +11,7 @@ import {
   Calendar, MessageSquare, ClipboardList, PenTool, Star, Sparkles, 
   BookOpen, BarChart2, TrendingUp, Search, FlaskConical, Zap, 
   Bell, Plug, Users, Settings, CreditCard, Shield, Code2, 
-  ChevronLeft, ChevronRight, Leaf
+  ChevronLeft, ChevronRight, Leaf, Stethoscope, FileCheck, AlertOctagon, Video, HeartHandshake
 } from 'lucide-react';
 
 const NAV_SECTIONS = [
@@ -20,6 +20,16 @@ const NAV_SECTIONS = [
     items: [
       { icon: LayoutDashboard, label: 'Overview', href: '/dashboard' },
       { icon: Building2, label: 'My Practice', href: '/dashboard/practice' },
+    ]
+  },
+  {
+    label: 'Clinical & Billing',
+    items: [
+      { icon: Stethoscope, label: 'AI SOAP Scribe', href: '/clinical/notes' },
+      { icon: FileCheck, label: 'Superbills (CMS-1500)', href: '/billing/superbills' },
+      { icon: AlertOctagon, label: 'Crisis 988 Guardian', href: '/crisis' },
+      { icon: Video, label: 'Telehealth Room', href: '/telehealth/session-elena-01' },
+      { icon: HeartHandshake, label: 'Client Portal', href: '/portal' },
     ]
   },
   {
@@ -90,7 +100,7 @@ export default function DashboardSidebar({ collapsed, onToggle, isMobile }: Dash
     <div className="flex flex-col h-full overflow-hidden">
       <div className="h-14 flex items-center px-4 border-b border-border">
         <Leaf className="w-6 h-6 text-primary flex-shrink-0" />
-        {!collapsed && <span className="ml-3 font-serif font-bold truncate">Acme Therapy</span>}
+        {!collapsed && <span className="ml-3 font-serif font-bold truncate">Willow & Mind Therapy</span>}
       </div>
 
       <div className="flex-1 overflow-y-auto py-4 scrollbar-hide">
