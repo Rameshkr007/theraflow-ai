@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import ScrollSpyDock from "@/components/ui/ScrollSpyDock";
 import {
   Sparkles,
   Play,
@@ -70,6 +71,9 @@ export default function MarketingPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground relative overflow-hidden">
+      {/* Smart Innovative Floating ScrollSpy Dock */}
+      <ScrollSpyDock />
+
       {/* Dynamic Background Ambient Glows & Dot Grid */}
       <div className="absolute inset-0 bg-[radial-gradient(#2D6A4F_1px,transparent_1px)] [background-size:28px_28px] opacity-[0.035] dark:opacity-[0.09] pointer-events-none" />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[650px] bg-gradient-to-b from-primary/20 via-emerald-500/8 to-transparent blur-[120px] pointer-events-none -z-10 rounded-full" />
@@ -80,7 +84,7 @@ export default function MarketingPage() {
       {/* ──────────────────────────────────────────────────────────────────────────
           1. HERO SECTION WITH DYNAMIC INTERACTIVE SIMULATOR
       ────────────────────────────────────────────────────────────────────────── */}
-      <section className="relative pt-32 pb-20 md:pt-44 md:pb-28 px-4 md:px-6">
+      <section id="hero" className="relative pt-32 pb-20 md:pt-44 md:pb-28 px-4 md:px-6">
         <div className="container mx-auto text-center max-w-5xl relative z-10">
           {/* Beacon Announcement Pill */}
           <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-primary/25 bg-primary/8 text-primary text-xs font-semibold backdrop-blur-md hover:border-primary/50 hover:bg-primary/15 transition-all duration-300 shadow-sm mb-8 group cursor-pointer">
@@ -497,7 +501,7 @@ export default function MarketingPage() {
       {/* ──────────────────────────────────────────────────────────────────────────
           NEW SECTION A: CLINICAL MODALITIES & EHR INTEGRATION ECOSYSTEM
       ────────────────────────────────────────────────────────────────────────── */}
-      <section className="py-24 px-4 md:px-6 bg-muted/20 border-t border-border">
+      <section id="ecosystem" className="py-24 px-4 md:px-6 bg-muted/20 border-t border-border">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12 space-y-3">
             <span className="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 uppercase tracking-wider">
@@ -694,7 +698,7 @@ export default function MarketingPage() {
       {/* ──────────────────────────────────────────────────────────────────────────
           NEW SECTION B: INTERACTIVE ROI & TIME-SAVINGS ESTIMATOR
       ────────────────────────────────────────────────────────────────────────── */}
-      <section className="py-24 px-4 md:px-6 bg-gradient-to-b from-card/40 to-background border-t border-border">
+      <section id="calculator" className="py-24 px-4 md:px-6 bg-gradient-to-b from-card/40 to-background border-t border-border">
         <div className="container mx-auto max-w-5xl">
           <div className="p-8 md:p-12 rounded-3xl border border-border/80 bg-card/90 shadow-2xl backdrop-blur-xl relative overflow-hidden">
             <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none -z-10" />
@@ -814,7 +818,7 @@ export default function MarketingPage() {
       {/* ──────────────────────────────────────────────────────────────────────────
           NEW SECTION C: COMPETITIVE COMPARISON MATRIX
       ────────────────────────────────────────────────────────────────────────── */}
-      <section className="py-24 px-4 md:px-6 border-t border-border">
+      <section id="comparison" className="py-24 px-4 md:px-6 border-t border-border">
         <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-16 space-y-3">
             <span className="px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-700 dark:text-purple-400 border border-purple-500/20 uppercase tracking-wider">
@@ -950,7 +954,7 @@ export default function MarketingPage() {
       {/* ──────────────────────────────────────────────────────────────────────────
           NEW SECTION D: CLINICAL WALL OF LOVE & VERIFIED CLINICIAN ENDORSEMENTS
       ────────────────────────────────────────────────────────────────────────── */}
-      <section className="py-24 px-4 md:px-6 bg-muted/30 border-t border-border">
+      <section id="testimonials" className="py-24 px-4 md:px-6 bg-muted/30 border-t border-border">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16 space-y-3">
             <span className="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 uppercase tracking-wider">
@@ -1071,7 +1075,7 @@ export default function MarketingPage() {
       {/* ──────────────────────────────────────────────────────────────────────────
           NEW SECTION E: SECURITY, ENCRYPTION & HIPAA COMPLIANCE TRUST BADGES
       ────────────────────────────────────────────────────────────────────────── */}
-      <section className="py-20 px-4 md:px-6 bg-card border-t border-border">
+      <section id="security" className="py-20 px-4 md:px-6 bg-card border-t border-border">
         <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-12 space-y-2">
             <span className="px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20 uppercase tracking-wider">
@@ -1236,7 +1240,7 @@ export default function MarketingPage() {
       {/* ──────────────────────────────────────────────────────────────────────────
           NEW SECTION F: INTERACTIVE CLINICAL FAQ ACCORDION
       ────────────────────────────────────────────────────────────────────────── */}
-      <section className="py-24 px-4 md:px-6 bg-muted/20 border-t border-border">
+      <section id="faq" className="py-24 px-4 md:px-6 bg-muted/20 border-t border-border">
         <div className="container mx-auto max-w-4xl">
           <div className="text-center mb-14 space-y-3">
             <span className="px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20 uppercase tracking-wider">

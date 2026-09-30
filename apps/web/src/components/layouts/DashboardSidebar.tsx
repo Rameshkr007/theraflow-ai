@@ -1,7 +1,5 @@
 "use client";
 
-'use client';
-
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -98,22 +96,33 @@ export default function DashboardSidebar({ collapsed, onToggle, isMobile }: Dash
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
-      <div className="h-14 flex items-center px-4 border-b border-border">
-        <Leaf className="w-6 h-6 text-primary flex-shrink-0" />
-        {!collapsed && <span className="ml-3 font-serif font-bold truncate">Willow & Mind Therapy</span>}
+      {/* Brand Practice Header */}
+      <div className="h-16 flex items-center justify-between px-4 border-b border-border/80 flex-shrink-0">
+        <Link href="/dashboard" className="flex items-center gap-2.5 min-w-0">
+          <div className="p-1.5 rounded-lg bg-primary/10 text-primary flex-shrink-0">
+            <Leaf className="w-5 h-5" />
+          </div>
+          {!collapsed && (
+            <div className="flex flex-col min-w-0">
+              <span className="font-serif font-bold text-sm text-foreground truncate">Willow & Mind</span>
+              <span className="text-[10px] text-muted-foreground truncate uppercase tracking-wider font-mono">Therapy OS</span>
+            </div>
+          )}
+        </Link>
       </div>
 
-      <div className="flex-1 overflow-y-auto py-4 scrollbar-hide">
+      {/* Independently Scrollable Navigation List */}
+      <div className="flex-1 overflow-y-auto py-4 px-2 space-y-6 scrollbar-thin scrollbar-thumb-border-strong overscroll-contain">
         {NAV_SECTIONS.map((section, idx) => (
-          <div key={idx} className="mb-6 px-3">
+          <div key={idx} className="space-y-1">
             {!collapsed && (
-              <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-2">
+              <h4 className="text-[10px] font-bold text-muted-foreground/80 uppercase tracking-wider px-2.5 mb-1.5">
                 {section.label}
               </h4>
             )}
-            <div className="space-y-1">
+            <div className="space-y-0.5">
               {section.items.map((item, itemIdx) => {
-                const isActive = pathname === item.href || pathname?.startsWith(`${item.href}/`);
+                const isActive = pathname === item.href || (item.href !== '/dashboard' && pathname?.startsWith(`${item.href}`));
                 const Icon = item.icon;
                 
                 return (
@@ -121,15 +130,18 @@ export default function DashboardSidebar({ collapsed, onToggle, isMobile }: Dash
                     key={itemIdx}
                     href={item.href}
                     className={cn(
-                      "flex items-center gap-3 rounded-md px-2 py-1.5 text-sm font-medium transition-colors group",
+                      "flex items-center gap-3 rounded-lg px-2.5 py-2 text-xs font-semibold transition-all relative group",
                       isActive 
-                        ? "bg-primary/10 text-primary" 
-                        : "text-muted-foreground hover:bg-muted hover:text-foreground",
-                      collapsed && "justify-center px-0"
+                        ? "bg-primary/10 text-primary shadow-xs font-bold before:absolute before:left-0 before:top-1.5 before:bottom-1.5 before:w-1 before:bg-primary before:rounded-r-full" 
+                        : "text-muted-foreground hover:bg-muted/70 hover:text-foreground",
+                      collapsed && "justify-center px-0 py-2.5"
                     )}
                     title={collapsed ? item.label : undefined}
                   >
-                    <Icon className={cn("w-4 h-4 flex-shrink-0", isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground")} />
+                    <Icon className={cn(
+                      "w-4 h-4 flex-shrink-0 transition-transform group-hover:scale-110",
+                      isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground"
+                    )} />
                     {!collapsed && <span className="truncate">{item.label}</span>}
                   </Link>
                 );
@@ -139,23 +151,30 @@ export default function DashboardSidebar({ collapsed, onToggle, isMobile }: Dash
         ))}
       </div>
 
-      <div className="p-3 border-t border-border">
+      {/* Footer Profile & Collapse Toggle */}
+      <div className="p-3 border-t border-border/80 flex-shrink-0 bg-background/50">
         {!isMobile && (
           <button 
             onClick={onToggle}
-            className="w-full flex items-center justify-center p-2 rounded-md hover:bg-muted text-muted-foreground transition-colors mb-2"
+            className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-muted/70 text-muted-foreground hover:text-foreground transition-all text-xs font-medium mb-2 group"
+            title={collapsed ? "Expand sidebar (Ctrl+B)" : "Collapse sidebar (Ctrl+B)"}
           >
-            {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+            {!collapsed && <span className="text-[11px] text-muted-foreground group-hover:text-foreground">Collapse</span>}
+            <div className="flex items-center gap-1">
+              {!collapsed && <span className="text-[9px] font-mono px-1 rounded bg-muted text-muted-foreground">Ctrl+B</span>}
+              {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+            </div>
           </button>
         )}
-        <div className={cn("flex items-center gap-3", collapsed ? "justify-center" : "px-2")}>
-          <div className="w-8 h-8 rounded-full bg-primary/20 flex-shrink-0 flex items-center justify-center text-primary font-bold text-xs">
+
+        <div className={cn("flex items-center gap-2.5", collapsed ? "justify-center" : "px-1")}>
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-emerald-600 text-white flex-shrink-0 flex items-center justify-center font-bold text-xs shadow-xs">
             DJ
           </div>
           {!collapsed && (
             <div className="flex flex-col min-w-0">
-              <span className="text-sm font-medium truncate text-foreground">Dr. Jenkins</span>
-              <span className="text-xs text-muted-foreground truncate">Owner</span>
+              <span className="text-xs font-bold truncate text-foreground">Dr. Sarah Jenkins</span>
+              <span className="text-[10px] text-emerald-600 font-medium truncate">Licensed Clinician (PsyD)</span>
             </div>
           )}
         </div>
