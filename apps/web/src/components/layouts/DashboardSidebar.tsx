@@ -19,7 +19,7 @@ const NAV_SECTIONS = [
     label: 'Practice',
     items: [
       { icon: LayoutDashboard, label: 'Overview', href: '/dashboard' },
-      { icon: Building2, label: 'My Practice', href: '/dashboard/practice' },
+      { icon: Building2, label: 'My Practice', href: '/practice' },
     ]
   },
   {
@@ -35,54 +35,54 @@ const NAV_SECTIONS = [
   {
     label: 'Website',
     items: [
-      { icon: Globe, label: 'Website', href: '/dashboard/website' },
-      { icon: FileText, label: 'Pages', href: '/dashboard/website/pages' },
-      { icon: Palette, label: 'Builder', href: '/dashboard/website/builder' },
-      { icon: Image, label: 'Media', href: '/dashboard/website/media' },
+      { icon: Globe, label: 'Website', href: '/website' },
+      { icon: FileText, label: 'Pages', href: '/website/pages' },
+      { icon: Palette, label: 'Builder', href: '/website/builder' },
+      { icon: Image, label: 'Media', href: '/website/media' },
     ]
   },
   {
     label: 'Clients',
     items: [
-      { icon: Calendar, label: 'Bookings', href: '/dashboard/bookings' },
-      { icon: MessageSquare, label: 'Inquiries', href: '/dashboard/inquiries' },
-      { icon: ClipboardList, label: 'Intake Forms', href: '/dashboard/intake' },
+      { icon: Calendar, label: 'Bookings', href: '/bookings' },
+      { icon: MessageSquare, label: 'Inquiries', href: '/inquiries' },
+      { icon: ClipboardList, label: 'Intake Forms', href: '/intake' },
     ]
   },
   {
     label: 'Content',
     items: [
-      { icon: PenTool, label: 'Content Studio', href: '/dashboard/content' },
-      { icon: Star, label: 'Testimonials', href: '/dashboard/testimonials' },
+      { icon: PenTool, label: 'Content Studio', href: '/content' },
+      { icon: Star, label: 'Testimonials', href: '/testimonials' },
     ]
   },
   {
     label: 'Intelligence',
     items: [
-      { icon: Sparkles, label: 'AI Copilot', href: '/dashboard/ai' },
-      { icon: BookOpen, label: 'Knowledge Hub', href: '/dashboard/knowledge' },
-      { icon: BarChart2, label: 'Analytics', href: '/dashboard/analytics' },
-      { icon: TrendingUp, label: 'Conversion Lab', href: '/dashboard/conversion' },
-      { icon: Search, label: 'SEO Center', href: '/dashboard/seo' },
-      { icon: FlaskConical, label: 'Experiments', href: '/dashboard/experiments' },
+      { icon: Sparkles, label: 'AI Copilot', href: '/ai' },
+      { icon: BookOpen, label: 'Knowledge Hub', href: '/knowledge' },
+      { icon: BarChart2, label: 'Analytics', href: '/analytics' },
+      { icon: TrendingUp, label: 'Conversion Lab', href: '/conversion' },
+      { icon: Search, label: 'SEO Center', href: '/seo' },
+      { icon: FlaskConical, label: 'Experiments', href: '/experiments' },
     ]
   },
   {
     label: 'Operations',
     items: [
-      { icon: Zap, label: 'Automation', href: '/dashboard/automation' },
-      { icon: Bell, label: 'Notifications', href: '/dashboard/notifications' },
-      { icon: Plug, label: 'Integrations', href: '/dashboard/integrations' },
+      { icon: Zap, label: 'Automation', href: '/automation' },
+      { icon: Bell, label: 'Notifications', href: '/notifications' },
+      { icon: Plug, label: 'Integrations', href: '/integrations' },
     ]
   },
   {
     label: 'Settings',
     items: [
-      { icon: Users, label: 'Team', href: '/dashboard/team' },
-      { icon: Settings, label: 'Settings', href: '/dashboard/settings' },
-      { icon: CreditCard, label: 'Billing', href: '/dashboard/settings/billing' },
-      { icon: Shield, label: 'Security', href: '/dashboard/settings/security' },
-      { icon: Code2, label: 'Developer', href: '/dashboard/developer' },
+      { icon: Users, label: 'Team', href: '/team' },
+      { icon: Settings, label: 'Settings', href: '/settings' },
+      { icon: CreditCard, label: 'Billing', href: '/settings/billing' },
+      { icon: Shield, label: 'Security', href: '/settings/security' },
+      { icon: Code2, label: 'Developer', href: '/developer' },
     ]
   },
 ];
