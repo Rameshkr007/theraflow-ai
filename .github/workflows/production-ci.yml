@@ -1,0 +1,59 @@
+name: Production CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate-and-build:
+    name: Lint, Test & Production Build
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: admin
+          POSTGRES_PASSWORD: theraflow_secret
+          POSTGRES_DB: theraflow
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Generate Prisma Client
+        env:
+          DATABASE_URL: postgresql://admin:theraflow_secret@localhost:5432/theraflow?schema=public
+        run: npx prisma generate --schema=packages/db/prisma/schema.prisma
+
+      - name: Validate Database Schema Migrations
+        env:
+          DATABASE_URL: postgresql://admin:theraflow_secret@localhost:5432/theraflow?schema=public
+        run: npx prisma db push --schema=packages/db/prisma/schema.prisma
+
+      - name: Production Next.js Build
+        env:
+          NODE_ENV: production
+          NEXT_TELEMETRY_DISABLED: 1
+          DATABASE_URL: postgresql://admin:theraflow_secret@localhost:5432/theraflow?schema=public
+          NEXTAUTH_URL: http://localhost:3000
+          NEXTAUTH_SECRET: test_secret_key_32_characters_long_min
+        run: npm run build --workspace=apps/web

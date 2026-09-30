@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  # ── PostgreSQL Database ───────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: theraflow-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-theraflow_secret}
+      POSTGRES_DB: ${POSTGRES_DB:-theraflow}
+    ports:
+      - "5432:5432"
+    volumes:
+      - theraflow_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d theraflow"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Next.js Application Core ──────────────────────────────────────────────
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: theraflow-web
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://admin:theraflow_secret@postgres:5432/theraflow?schema=public
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-theraflow_super_secret_production_key_32_bytes}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+    ports:
+      - "3000:3000"
+
+volumes:
+  theraflow_pgdata:
+    driver: local
