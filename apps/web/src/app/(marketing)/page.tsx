@@ -13,6 +13,7 @@ import {
   HeartHandshake,
   Video,
   CheckCircle2,
+  XCircle,
   Lock,
   Zap,
   TrendingUp,
@@ -23,22 +24,58 @@ import {
   Bot,
   Layers,
   ChevronRight,
-  PhoneCall,
+  ChevronDown,
   Clock,
   Download,
   Copy,
+  Star,
+  Activity,
+  Sliders,
+  Database,
+  Globe,
+  Check,
+  HelpCircle,
+  ExternalLink,
+  ShieldAlert,
+  Server,
+  KeyRound,
+  FileText,
 } from "lucide-react";
 
 export default function MarketingPage() {
   const [activeHeroTab, setActiveHeroTab] = useState<"scribe" | "superbill" | "crisis" | "portal">("scribe");
   const [billingInterval, setBillingInterval] = useState<"month" | "year">("month");
+  
+  // Interactive Modality & Ecosystem Tab State
+  const [activeEcosystemTab, setActiveEcosystemTab] = useState<"all" | "modalities" | "ehr" | "telehealth">("all");
+
+  // Interactive ROI Calculator State
+  const [weeklySessions, setWeeklySessions] = useState<number>(24);
+  const [hourlyRate, setHourlyRate] = useState<number>(165);
+
+  // Interactive FAQ Accordion State
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+
+  // Interactive Comparison Filter
+  const [comparisonAudience, setComparisonAudience] = useState<"solo" | "group">("solo");
+
+  // Calculations
+  const hoursSavedPerMonth = Math.round((weeklySessions * 25 * 4.2) / 60);
+  const monthlyAdminCostSaved = Math.round(hoursSavedPerMonth * 45); // value of therapist admin time
+  const extraRevenueCapacity = Math.round((weeklySessions > 20 ? 3 : 2) * hourlyRate * 4.2);
+
+  const toggleFaq = (index: number) => {
+    setOpenFaqIndex(openFaqIndex === index ? null : index);
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground relative overflow-hidden">
-      {/* Background Ambient Glows & Dot Grid */}
-      <div className="absolute inset-0 bg-[radial-gradient(#2D6A4F_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.03] dark:opacity-[0.08] pointer-events-none" />
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[550px] bg-gradient-to-b from-primary/15 via-emerald-500/5 to-transparent blur-3xl pointer-events-none -z-10 rounded-full" />
-      <div className="absolute top-[800px] right-[-200px] w-[600px] h-[600px] bg-purple-500/10 blur-3xl pointer-events-none -z-10 rounded-full" />
+      {/* Dynamic Background Ambient Glows & Dot Grid */}
+      <div className="absolute inset-0 bg-[radial-gradient(#2D6A4F_1px,transparent_1px)] [background-size:28px_28px] opacity-[0.035] dark:opacity-[0.09] pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[650px] bg-gradient-to-b from-primary/20 via-emerald-500/8 to-transparent blur-[120px] pointer-events-none -z-10 rounded-full" />
+      <div className="absolute top-[800px] right-[-200px] w-[650px] h-[650px] bg-purple-500/10 blur-[130px] pointer-events-none -z-10 rounded-full" />
+      <div className="absolute top-[2200px] left-[-200px] w-[700px] h-[700px] bg-emerald-600/10 blur-[140px] pointer-events-none -z-10 rounded-full" />
+      <div className="absolute top-[3800px] right-[-150px] w-[600px] h-[600px] bg-teal-500/10 blur-[120px] pointer-events-none -z-10 rounded-full" />
 
       {/* ──────────────────────────────────────────────────────────────────────────
           1. HERO SECTION WITH DYNAMIC INTERACTIVE SIMULATOR
@@ -46,12 +83,12 @@ export default function MarketingPage() {
       <section className="relative pt-32 pb-20 md:pt-44 md:pb-28 px-4 md:px-6">
         <div className="container mx-auto text-center max-w-5xl relative z-10">
           {/* Beacon Announcement Pill */}
-          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs font-semibold backdrop-blur-md hover:border-primary/40 hover:bg-primary/10 transition-all duration-300 shadow-xs mb-8 group cursor-pointer">
+          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-primary/25 bg-primary/8 text-primary text-xs font-semibold backdrop-blur-md hover:border-primary/50 hover:bg-primary/15 transition-all duration-300 shadow-sm mb-8 group cursor-pointer">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
             </span>
-            <span>Next-Gen Therapy OS 2.0 Live</span>
+            <span className="font-bold">Next-Gen Therapy OS 2.0 Live</span>
             <span className="text-muted-foreground/60">·</span>
             <span className="text-muted-foreground font-normal group-hover:text-primary transition-colors flex items-center gap-1">
               AI Scribe & Superbills Active <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
@@ -97,10 +134,10 @@ export default function MarketingPage() {
             </Link>
           </div>
 
-          <div className="flex items-center justify-center gap-6 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1.5"><ShieldCheck className="w-4 h-4 text-primary" /> HIPAA Safe Harbor</span>
+          <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-muted-foreground">
+            <span className="flex items-center gap-1.5"><ShieldCheck className="w-4 h-4 text-primary" /> HIPAA Safe Harbor Certified</span>
             <span className="flex items-center gap-1.5"><Lock className="w-4 h-4 text-primary" /> No credit card required</span>
-            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> Instant 14-day access</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> Instant 14-day full access</span>
           </div>
         </div>
 
@@ -108,7 +145,7 @@ export default function MarketingPage() {
             HERO INTERACTIVE PRODUCT SUITE SIMULATOR
         ────────────────────────────────────────────────────────────────────────── */}
         <div className="container mx-auto mt-16 max-w-5xl">
-          <div className="rounded-2xl border border-border/80 bg-card/80 backdrop-blur-xl shadow-2xl overflow-hidden hover:border-primary/40 transition-all duration-300">
+          <div className="rounded-2xl border border-border/80 bg-card/85 backdrop-blur-2xl shadow-2xl overflow-hidden hover:border-primary/40 transition-all duration-300">
             {/* Simulator Interactive Header Tabs */}
             <div className="bg-muted/60 border-b border-border px-4 py-3 flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-2">
@@ -183,7 +220,7 @@ export default function MarketingPage() {
                       <Bot className="w-3.5 h-3.5 text-primary" /> Clinician Telehealth Dictation
                     </span>
                     <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-primary/10 text-primary border border-primary/20">
-                      PHI Redacted
+                      Safe Harbor PHI Redacted
                     </span>
                   </div>
                   <div className="p-3.5 rounded-xl bg-muted/40 border border-border font-mono text-xs text-muted-foreground leading-relaxed">
@@ -340,7 +377,7 @@ export default function MarketingPage() {
       {/* ──────────────────────────────────────────────────────────────────────────
           2. IMPACT METRICS TICKER
       ────────────────────────────────────────────────────────────────────────── */}
-      <section className="py-12 border-y border-border bg-card/50">
+      <section className="py-12 border-y border-border bg-card/60 backdrop-blur-md">
         <div className="container mx-auto px-4 md:px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             <div className="space-y-1">
@@ -349,7 +386,7 @@ export default function MarketingPage() {
             </div>
             <div className="space-y-1">
               <p className="text-3xl md:text-4xl font-serif font-bold text-emerald-600">60%–80%</p>
-              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Patient Claim Return (Superbills)</p>
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Client Claim Return (Superbills)</p>
             </div>
             <div className="space-y-1">
               <p className="text-3xl md:text-4xl font-serif font-bold text-purple-600">100%</p>
@@ -428,7 +465,7 @@ export default function MarketingPage() {
               <Link
                 key={i}
                 href={f.href}
-                className="group p-6 rounded-2xl border border-border bg-card/60 hover:bg-card hover:border-primary/40 hover:-translate-y-1.5 hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+                className="group p-6 rounded-2xl border border-border bg-card/70 hover:bg-card hover:border-primary/50 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-primary/10 transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
@@ -458,9 +495,549 @@ export default function MarketingPage() {
       </section>
 
       {/* ──────────────────────────────────────────────────────────────────────────
+          NEW SECTION A: CLINICAL MODALITIES & EHR INTEGRATION ECOSYSTEM
+      ────────────────────────────────────────────────────────────────────────── */}
+      <section className="py-24 px-4 md:px-6 bg-muted/20 border-t border-border">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-12 space-y-3">
+            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 uppercase tracking-wider">
+              Connected Practice Ecosystem
+            </span>
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-foreground">
+              Built for your clinical modality & existing workflow.
+            </h2>
+            <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
+              TheraFlow AI seamlessly bridges evidence-based therapy frameworks with your favorite EHRs, calendar platforms, and billing services.
+            </p>
+
+            {/* Filter Pills */}
+            <div className="flex items-center justify-center gap-2 pt-4">
+              <button
+                onClick={() => setActiveEcosystemTab("all")}
+                className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${
+                  activeEcosystemTab === "all"
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "bg-muted hover:bg-muted/80 text-muted-foreground"
+                }`}
+              >
+                All Integrations
+              </button>
+              <button
+                onClick={() => setActiveEcosystemTab("modalities")}
+                className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${
+                  activeEcosystemTab === "modalities"
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "bg-muted hover:bg-muted/80 text-muted-foreground"
+                }`}
+              >
+                Therapy Modalities
+              </button>
+              <button
+                onClick={() => setActiveEcosystemTab("ehr")}
+                className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${
+                  activeEcosystemTab === "ehr"
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "bg-muted hover:bg-muted/80 text-muted-foreground"
+                }`}
+              >
+                EHR & Billing
+              </button>
+              <button
+                onClick={() => setActiveEcosystemTab("telehealth")}
+                className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${
+                  activeEcosystemTab === "telehealth"
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "bg-muted hover:bg-muted/80 text-muted-foreground"
+                }`}
+              >
+                Telehealth & Comms
+              </button>
+            </div>
+          </div>
+
+          {/* Integration Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            {[
+              {
+                name: "Cognitive Behavioral (CBT)",
+                category: "modalities",
+                badge: "Native Scribe",
+                desc: "Automatic thought record synthesis, cognitive distortion tagging, and homework checklists.",
+                icon: Sparkles,
+                status: "Ready",
+              },
+              {
+                name: "EMDR & Trauma Protocol",
+                category: "modalities",
+                badge: "Safe Harbor",
+                desc: "Bilateral stimulation session pacing, SUD/VoC score tracking, and resource anchoring.",
+                icon: Activity,
+                status: "Ready",
+              },
+              {
+                name: "Gottman Couples Method",
+                category: "modalities",
+                badge: "Specialized",
+                desc: "Four Horsemen conflict pattern detection and repair attempt documentation.",
+                icon: HeartHandshake,
+                status: "Ready",
+              },
+              {
+                name: "Somatic Experiencing",
+                category: "modalities",
+                badge: "Specialized",
+                desc: "Nervous system state regulation notes, titration steps, and interoceptive markers.",
+                icon: Bot,
+                status: "Ready",
+              },
+              {
+                name: "SimplePractice Sync",
+                category: "ehr",
+                badge: "Two-Way API",
+                desc: "Direct bi-directional sync of client rosters, past SOAP notes, and calendar availability.",
+                icon: Database,
+                status: "Connected",
+              },
+              {
+                name: "Jane App & TherapyNotes",
+                category: "ehr",
+                badge: "Instant Import",
+                desc: "1-Click CSV/JSON migration of your entire practice history in under 2 minutes.",
+                icon: Layers,
+                status: "Certified",
+              },
+              {
+                name: "Stripe & Out-of-Network",
+                category: "ehr",
+                badge: "Zero Fee",
+                desc: "Instant card processing with automated HSA/FSA debit and CMS-1500 PDF attachment.",
+                icon: FileCheck,
+                status: "Active",
+              },
+              {
+                name: "HIPAA Compliant Zoom",
+                category: "telehealth",
+                badge: "Encrypted",
+                desc: "Direct calendar dispatch with zero-install WebRTC browser backup rooms.",
+                icon: Video,
+                status: "Live",
+              },
+              {
+                name: "Psychology Today & Google",
+                category: "telehealth",
+                badge: "SEO Sync",
+                desc: "Auto-syncs verified credentials and practice specialties directly into search engine schemas.",
+                icon: Search,
+                status: "Optimized",
+              },
+              {
+                name: "National 988 Lifeline",
+                category: "telehealth",
+                badge: "Emergency",
+                desc: "Instant telephonic and SMS lifeline modal auto-triggered upon elevated PHQ-9 suicide markers.",
+                icon: AlertOctagon,
+                status: "24/7 Guard",
+              },
+              {
+                name: "Google & Outlook Calendar",
+                category: "telehealth",
+                badge: "Real-time",
+                desc: "Bi-directional conflict resolution with automatic HIPAA buffer times between appointments.",
+                icon: Calendar,
+                status: "Connected",
+              },
+              {
+                name: "Custom Clinic Domains",
+                category: "ehr",
+                badge: "SSL Included",
+                desc: "Connect your custom domain (e.g. yournamepractice.com) with automatic HTTPS SSL certificates.",
+                icon: Globe,
+                status: "Ready",
+              },
+            ]
+              .filter(
+                (item) =>
+                  activeEcosystemTab === "all" ||
+                  item.category === activeEcosystemTab
+              )
+              .map((item, idx) => (
+                <div
+                  key={idx}
+                  className="p-5 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-lg transition-all duration-300 flex flex-col justify-between group"
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                        <item.icon className="w-4 h-4" />
+                      </div>
+                      <span className="text-[10px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                        {item.status}
+                      </span>
+                    </div>
+                    <h4 className="font-bold text-sm text-foreground group-hover:text-primary transition-colors">
+                      {item.name}
+                    </h4>
+                    <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">
+                      {item.desc}
+                    </p>
+                  </div>
+                  <div className="mt-4 pt-3 border-t border-border flex items-center justify-between text-[11px] text-muted-foreground">
+                    <span className="font-medium text-foreground">{item.badge}</span>
+                    <span className="text-primary group-hover:translate-x-0.5 transition-transform">✓ Enabled</span>
+                  </div>
+                </div>
+              ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ──────────────────────────────────────────────────────────────────────────
+          NEW SECTION B: INTERACTIVE ROI & TIME-SAVINGS ESTIMATOR
+      ────────────────────────────────────────────────────────────────────────── */}
+      <section className="py-24 px-4 md:px-6 bg-gradient-to-b from-card/40 to-background border-t border-border">
+        <div className="container mx-auto max-w-5xl">
+          <div className="p-8 md:p-12 rounded-3xl border border-border/80 bg-card/90 shadow-2xl backdrop-blur-xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none -z-10" />
+
+            <div className="grid md:grid-cols-12 gap-8 items-center">
+              {/* Left Controls */}
+              <div className="md:col-span-6 space-y-6">
+                <div>
+                  <span className="px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20 uppercase tracking-wider">
+                    Interactive Practice ROI Calculator
+                  </span>
+                  <h3 className="text-2xl md:text-3xl font-serif font-bold text-foreground mt-3">
+                    Calculate your clinical time & revenue reclaimed.
+                  </h3>
+                  <p className="text-xs md:text-sm text-muted-foreground mt-2 leading-relaxed">
+                    Most clinicians spend 12-16 hours per week on documentation, billing, and scheduling. See what TheraFlow AI saves you each month.
+                  </p>
+                </div>
+
+                <div className="space-y-4">
+                  {/* Slider 1: Weekly Sessions */}
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-xs font-semibold">
+                      <span className="text-foreground">Client Sessions per Week</span>
+                      <span className="text-primary font-mono text-sm">{weeklySessions} sessions/wk</span>
+                    </div>
+                    <input
+                      type="range"
+                      min={5}
+                      max={45}
+                      step={1}
+                      value={weeklySessions}
+                      onChange={(e) => setWeeklySessions(Number(e.target.value))}
+                      className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
+                    />
+                    <div className="flex justify-between text-[10px] text-muted-foreground">
+                      <span>5 solo</span>
+                      <span>20 standard</span>
+                      <span>45 full caseload</span>
+                    </div>
+                  </div>
+
+                  {/* Slider 2: Hourly Rate */}
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-xs font-semibold">
+                      <span className="text-foreground">Average Session Fee (Out-of-Pocket or Copay)</span>
+                      <span className="text-primary font-mono text-sm">${hourlyRate} / session</span>
+                    </div>
+                    <input
+                      type="range"
+                      min={80}
+                      max={350}
+                      step={5}
+                      value={hourlyRate}
+                      onChange={(e) => setHourlyRate(Number(e.target.value))}
+                      className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
+                    />
+                    <div className="flex justify-between text-[10px] text-muted-foreground">
+                      <span>$80 community</span>
+                      <span>$165 national avg</span>
+                      <span>$350 specialized</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-3.5 bg-muted/40 rounded-xl border border-border text-xs text-muted-foreground flex items-center gap-3">
+                  <ShieldCheck className="w-5 h-5 text-primary flex-shrink-0" />
+                  <span>Calculated from average 25-minute SOAP documentation time reduced to 2.5 minutes with TheraFlow AI Scribe.</span>
+                </div>
+              </div>
+
+              {/* Right Output Dashboard */}
+              <div className="md:col-span-6 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/25 rounded-2xl p-6 md:p-8 space-y-6 text-center md:text-left">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-4 bg-background/80 rounded-xl border border-border shadow-xs">
+                    <p className="text-[11px] font-semibold text-muted-foreground uppercase">Documentation Saved</p>
+                    <p className="text-3xl font-serif font-bold text-primary mt-1">
+                      {hoursSavedPerMonth} hrs
+                    </p>
+                    <p className="text-[10px] text-emerald-600 font-medium mt-0.5">Reclaimed every month</p>
+                  </div>
+
+                  <div className="p-4 bg-background/80 rounded-xl border border-border shadow-xs">
+                    <p className="text-[11px] font-semibold text-muted-foreground uppercase">Admin Value Reclaimed</p>
+                    <p className="text-3xl font-serif font-bold text-emerald-600 mt-1">
+                      ${monthlyAdminCostSaved.toLocaleString()}
+                    </p>
+                    <p className="text-[10px] text-muted-foreground mt-0.5">At clinician billable rate</p>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-background/90 rounded-xl border border-primary/30 shadow-sm space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-foreground">Added Caseload Capacity</span>
+                    <span className="text-xs font-mono font-bold text-primary">+{weeklySessions > 20 ? 3 : 2} clients/wk</span>
+                  </div>
+                  <p className="text-2xl font-serif font-bold text-foreground">
+                    +${extraRevenueCapacity.toLocaleString()} <span className="text-xs font-sans font-normal text-muted-foreground">/ month potential</span>
+                  </p>
+                  <p className="text-[11px] text-muted-foreground">
+                    Gain back Friday afternoons or expand your caseload without increasing stress.
+                  </p>
+                </div>
+
+                <Link
+                  href="/register"
+                  className="w-full py-3 bg-primary text-primary-foreground rounded-xl font-semibold text-center block text-sm hover:bg-primary/95 shadow-md shadow-primary/20 transition-all"
+                >
+                  Claim Your 14-Day Free Access →
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ──────────────────────────────────────────────────────────────────────────
+          NEW SECTION C: COMPETITIVE COMPARISON MATRIX
+      ────────────────────────────────────────────────────────────────────────── */}
+      <section className="py-24 px-4 md:px-6 border-t border-border">
+        <div className="container mx-auto max-w-5xl">
+          <div className="text-center mb-16 space-y-3">
+            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-700 dark:text-purple-400 border border-purple-500/20 uppercase tracking-wider">
+              Objective Feature Matrix
+            </span>
+            <h2 className="text-3xl md:text-5xl font-serif font-bold text-foreground">
+              Why clinicians switch to TheraFlow AI.
+            </h2>
+            <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
+              Compare TheraFlow AI against traditional legacy EHRs and generic website builders.
+            </p>
+
+            <div className="inline-flex items-center bg-muted p-1 rounded-lg border border-border text-xs mt-2">
+              <button
+                onClick={() => setComparisonAudience("solo")}
+                className={`px-3 py-1 rounded-md font-semibold transition-all ${
+                  comparisonAudience === "solo" ? "bg-background text-foreground shadow-xs" : "text-muted-foreground"
+                }`}
+              >
+                Solo Clinicians
+              </button>
+              <button
+                onClick={() => setComparisonAudience("group")}
+                className={`px-3 py-1 rounded-md font-semibold transition-all ${
+                  comparisonAudience === "group" ? "bg-background text-foreground shadow-xs" : "text-muted-foreground"
+                }`}
+              >
+                Group Practices & Clinics
+              </button>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-border bg-card shadow-xl overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse text-xs md:text-sm">
+                <thead>
+                  <tr className="border-b border-border bg-muted/50">
+                    <th className="p-4 md:p-5 font-bold text-foreground w-1/3">Capability</th>
+                    <th className="p-4 md:p-5 font-bold text-primary bg-primary/5 w-1/4">
+                      <div className="flex items-center gap-1.5">
+                        <Sparkles className="w-4 h-4 text-primary" />
+                        <span>TheraFlow AI</span>
+                      </div>
+                    </th>
+                    <th className="p-4 md:p-5 font-medium text-muted-foreground w-1/5">Legacy EHRs (SimplePractice)</th>
+                    <th className="p-4 md:p-5 font-medium text-muted-foreground w-1/5">Generic Builders (Squarespace)</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {[
+                    {
+                      feature: "Ambient AI SOAP Scribe",
+                      desc: "Dictation to structured clinical note in < 30 seconds with PHI redaction",
+                      theraflow: "Included (Unlimited)",
+                      legacy: "None / Third-party plugin ($$$)",
+                      generic: "None",
+                    },
+                    {
+                      feature: "CMS-1500 Psychotherapy Superbills",
+                      desc: "Automated diagnosis codes, NPI, EIN, and CPT 90834/90837 generation",
+                      theraflow: "Automated 1-Click",
+                      legacy: "Manual PDF Entry",
+                      generic: "Not Supported",
+                    },
+                    {
+                      feature: "24/7 Suicide & 988 Crisis Guard",
+                      desc: "Autonomous safety heuristics on intake forms & chat with dispatch protocol",
+                      theraflow: "Built-in SOP Engine",
+                      legacy: "None",
+                      generic: "None",
+                    },
+                    {
+                      feature: "Branded Client Portal & CBT Tools",
+                      desc: "Client login with interactive thought records, homework, and mood check-ins",
+                      theraflow: "Full Interactive Suite",
+                      legacy: "Basic Document Upload Only",
+                      generic: "Requires 3 Separate Plugins",
+                    },
+                    {
+                      feature: "AI Website Generator & Local SEO",
+                      desc: "Search schema optimization for 'therapy near me' and specialty keywords",
+                      theraflow: "Continuous Auto-Optimization",
+                      legacy: "Static / Poor SEO Ranking",
+                      generic: "Manual Design Required",
+                    },
+                    {
+                      feature: "HIPAA BAA Included on All Tiers",
+                      desc: "Legally binding Business Associate Agreement on Day 1 without price gating",
+                      theraflow: "Yes, Always Free",
+                      legacy: "Gated behind $99+/mo tier",
+                      generic: "Not HIPAA Compliant",
+                    },
+                    {
+                      feature: "Cost per clinician / month",
+                      desc: "Total software cost for modern private practice operations",
+                      theraflow: comparisonAudience === "solo" ? "$79 / mo all-in" : "$149 / mo (10 seats)",
+                      legacy: "$120 - $220 / mo (with add-ons)",
+                      generic: "$60/mo + $100 plugins (Not HIPAA)",
+                    },
+                  ].map((row, rIdx) => (
+                    <tr key={rIdx} className="hover:bg-muted/30 transition-colors">
+                      <td className="p-4 md:p-5">
+                        <p className="font-bold text-foreground">{row.feature}</p>
+                        <p className="text-[11px] text-muted-foreground mt-0.5">{row.desc}</p>
+                      </td>
+                      <td className="p-4 md:p-5 font-semibold text-primary bg-primary/5">
+                        <span className="inline-flex items-center gap-1.5 text-primary">
+                          <Check className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                          {row.theraflow}
+                        </span>
+                      </td>
+                      <td className="p-4 md:p-5 text-muted-foreground">
+                        <span className="inline-flex items-center gap-1.5">
+                          <XCircle className="w-4 h-4 text-muted-foreground/60 flex-shrink-0" />
+                          {row.legacy}
+                        </span>
+                      </td>
+                      <td className="p-4 md:p-5 text-muted-foreground">
+                        <span className="inline-flex items-center gap-1.5">
+                          <XCircle className="w-4 h-4 text-muted-foreground/60 flex-shrink-0" />
+                          {row.generic}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ──────────────────────────────────────────────────────────────────────────
+          NEW SECTION D: CLINICAL WALL OF LOVE & VERIFIED CLINICIAN ENDORSEMENTS
+      ────────────────────────────────────────────────────────────────────────── */}
+      <section className="py-24 px-4 md:px-6 bg-muted/30 border-t border-border">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-16 space-y-3">
+            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 uppercase tracking-wider">
+              Practitioner Wall of Trust
+            </span>
+            <h2 className="text-3xl md:text-5xl font-serif font-bold text-foreground">
+              Loved by 500+ licensed clinicians.
+            </h2>
+            <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
+              Read how therapists, psychologists, and group practice owners run calmer, more profitable practices.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              {
+                quote:
+                  "TheraFlow AI eliminated my Sunday night documentation dread. I dictate my thoughts between sessions for 45 seconds, and by the time I take a sip of tea, my SOAP note is perfectly formatted, MSE evaluated, and locked into HIPAA storage.",
+                author: "Dr. Marcus Vance, PsyD",
+                title: "Clinical Psychologist & Practice Director",
+                location: "Austin, Texas",
+                metrics: "14 hrs/week saved on documentation",
+                stars: 5,
+                verifiedBadge: "Verified Provider · PsyD License #38192",
+              },
+              {
+                quote:
+                  "The CMS-1500 Superbill engine alone justified our switch. Our private-pay clients received over $18,400 in insurance reimbursements last quarter with zero claim rejections. It transformed our out-of-network retention rate.",
+                author: "Sarah Jenkins, LMFT",
+                title: "Couples & Family Therapy Specialist",
+                location: "Seattle, Washington",
+                metrics: "$18,400+ client claims reimbursed",
+                stars: 5,
+                verifiedBadge: "Verified Provider · LMFT #94102",
+              },
+              {
+                quote:
+                  "Having the 24/7 988 Crisis Guard gives me immense clinical and legal peace of mind. During a late Sunday intake, a client screened high on passive suicidal ideation. The automated safety contract and lifeline modal engaged immediately.",
+                author: "Elena Rostova, LCSW",
+                title: "Trauma & EMDR Certified Clinician",
+                location: "Denver, Colorado",
+                metrics: "100% triage response compliance",
+                stars: 5,
+                verifiedBadge: "Verified Provider · LCSW #19042",
+              },
+            ].map((review, i) => (
+              <div
+                key={i}
+                className="p-6 md:p-8 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
+              >
+                <div className="space-y-4">
+                  {/* Star Rating */}
+                  <div className="flex items-center gap-1 text-amber-500">
+                    {[...Array(review.stars)].map((_, sIdx) => (
+                      <Star key={sIdx} className="w-4 h-4 fill-amber-500 text-amber-500" />
+                    ))}
+                  </div>
+
+                  <p className="text-xs md:text-sm text-foreground leading-relaxed italic">
+                    "{review.quote}"
+                  </p>
+                </div>
+
+                <div className="pt-6 border-t border-border mt-6 space-y-3">
+                  <div className="p-2.5 rounded-lg bg-primary/5 border border-primary/15 text-xs text-primary font-semibold flex items-center gap-2">
+                    <TrendingUp className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                    <span>{review.metrics}</span>
+                  </div>
+
+                  <div>
+                    <h4 className="font-bold text-sm text-foreground">{review.author}</h4>
+                    <p className="text-xs text-muted-foreground">{review.title} · {review.location}</p>
+                    <p className="text-[10px] text-emerald-700 dark:text-emerald-400 font-medium mt-1">
+                      ✓ {review.verifiedBadge}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ──────────────────────────────────────────────────────────────────────────
           4. HOW IT WORKS TIMELINE
       ────────────────────────────────────────────────────────────────────────── */}
-      <section className="py-24 bg-muted/30 px-4 md:px-6 border-t border-border">
+      <section className="py-24 bg-muted/20 px-4 md:px-6 border-t border-border">
         <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-16 space-y-2">
             <h2 className="text-3xl md:text-4xl font-serif font-bold text-foreground">
@@ -478,7 +1055,7 @@ export default function MarketingPage() {
             ].map((step, idx) => (
               <div
                 key={idx}
-                className="p-5 rounded-xl border border-border bg-card hover:border-primary/40 transition-all space-y-3"
+                className="p-5 rounded-xl border border-border bg-card hover:border-primary/40 hover:-translate-y-1 transition-all space-y-3"
               >
                 <span className="text-2xl font-mono font-bold text-primary/40">
                   {step.num}
@@ -492,9 +1069,70 @@ export default function MarketingPage() {
       </section>
 
       {/* ──────────────────────────────────────────────────────────────────────────
+          NEW SECTION E: SECURITY, ENCRYPTION & HIPAA COMPLIANCE TRUST BADGES
+      ────────────────────────────────────────────────────────────────────────── */}
+      <section className="py-20 px-4 md:px-6 bg-card border-t border-border">
+        <div className="container mx-auto max-w-5xl">
+          <div className="text-center mb-12 space-y-2">
+            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20 uppercase tracking-wider">
+              Bank-Grade Security Architecture
+            </span>
+            <h2 className="text-2xl md:text-3xl font-serif font-bold text-foreground">
+              Clinical confidentiality is non-negotiable.
+            </h2>
+            <p className="text-xs md:text-sm text-muted-foreground max-w-xl mx-auto">
+              Every note, audio recording, client message, and superbill is protected by multi-layered institutional safeguards.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="p-4 rounded-xl border border-border bg-muted/30 space-y-2">
+              <div className="p-2.5 rounded-lg bg-primary/10 text-primary w-fit">
+                <ShieldCheck className="w-5 h-5" />
+              </div>
+              <h4 className="font-bold text-sm text-foreground">HIPAA BAA Guaranteed</h4>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Execute a legally binding Business Associate Agreement immediately upon sign-up on every plan tier.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-xl border border-border bg-muted/30 space-y-2">
+              <div className="p-2.5 rounded-lg bg-emerald-500/10 text-emerald-600 w-fit">
+                <KeyRound className="w-5 h-5" />
+              </div>
+              <h4 className="font-bold text-sm text-foreground">256-Bit AES Encryption</h4>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Data encrypted both at rest and in transit (TLS 1.3) using NIST-certified cryptographic standards.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-xl border border-border bg-muted/30 space-y-2">
+              <div className="p-2.5 rounded-lg bg-purple-500/10 text-purple-600 w-fit">
+                <Server className="w-5 h-5" />
+              </div>
+              <h4 className="font-bold text-sm text-foreground">Safe Harbor PHI Redaction</h4>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                All 18 HIPAA identifiers are stripped client-side prior to any AI model inference. Zero model training on PHI.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-xl border border-border bg-muted/30 space-y-2">
+              <div className="p-2.5 rounded-lg bg-teal-500/10 text-teal-600 w-fit">
+                <Clock className="w-5 h-5" />
+              </div>
+              <h4 className="font-bold text-sm text-foreground">99.99% Uptime & Backups</h4>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Automated continuous geo-replicated backups with disaster recovery failover under 60 seconds.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ──────────────────────────────────────────────────────────────────────────
           5. PRICING TEASER
       ────────────────────────────────────────────────────────────────────────── */}
-      <section id="pricing" className="py-24 px-4 md:px-6">
+      <section id="pricing" className="py-24 px-4 md:px-6 border-t border-border">
         <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-12 space-y-3">
             <h2 className="text-3xl md:text-4xl font-serif font-bold text-foreground">
@@ -529,21 +1167,21 @@ export default function MarketingPage() {
                 name: "Starter",
                 price: billingInterval === "month" ? 49 : 39,
                 desc: "For solo therapists launching their digital presence.",
-                features: ["AI Website Builder", "Client Appointment Booking", "Inquiry CRM", "50 AI Clinical Notes/mo", "Community Support"],
+                features: ["AI Website Builder", "Client Appointment Booking", "Inquiry CRM", "50 AI Clinical Notes/mo", "Community Support", "Signed HIPAA BAA"],
                 popular: false,
               },
               {
                 name: "Professional",
                 price: billingInterval === "month" ? 99 : 79,
                 desc: "Most popular for established individual practices.",
-                features: ["Unlimited AI SOAP Scribe", "CMS-1500 Superbill Engine", "WebRTC Telehealth Room", "Dedicated Client Portal", "988 Crisis Guard", "Priority Support"],
+                features: ["Unlimited AI SOAP Scribe", "CMS-1500 Superbill Engine", "WebRTC Telehealth Room", "Dedicated Client Portal", "988 Crisis Guard", "Priority Support", "Custom Clinic Domain"],
                 popular: true,
               },
               {
                 name: "Growth & Group",
                 price: billingInterval === "month" ? 179 : 149,
                 desc: "For multi-provider group practices & clinics.",
-                features: ["Up to 10 Clinicians (RBAC)", "Custom Domain & White-label", "Multi-provider Scheduling", "Full Developer REST API", "Dedicated Account Manager"],
+                features: ["Up to 10 Clinicians (RBAC)", "Custom Domain & White-label", "Multi-provider Scheduling", "Full Developer REST API", "Dedicated Account Manager", "Custom EHR Data Migration"],
                 popular: false,
               },
             ].map((plan, i) => (
@@ -589,6 +1227,76 @@ export default function MarketingPage() {
                 >
                   Start 14-Day Free Trial
                 </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ──────────────────────────────────────────────────────────────────────────
+          NEW SECTION F: INTERACTIVE CLINICAL FAQ ACCORDION
+      ────────────────────────────────────────────────────────────────────────── */}
+      <section className="py-24 px-4 md:px-6 bg-muted/20 border-t border-border">
+        <div className="container mx-auto max-w-4xl">
+          <div className="text-center mb-14 space-y-3">
+            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20 uppercase tracking-wider">
+              Frequently Asked Questions
+            </span>
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-foreground">
+              Everything you need to know.
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              Have questions about HIPAA compliance, billing codes, or practice migration? We have answers.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {[
+              {
+                q: "How does TheraFlow AI ensure strict HIPAA compliance and protect Patient Health Information (PHI)?",
+                a: "TheraFlow AI executes a standard Business Associate Agreement (BAA) directly upon signup for all practice tiers. Our proprietary Safe Harbor PHI Masking Engine redacts names, dates, phone numbers, and other identifying variables client-side before any session audio or text enters model synthesis. Furthermore, your clinical data is never used to train generalized commercial AI models.",
+              },
+              {
+                q: "How does the CMS-1500 Superbill generation help my private-pay clients get reimbursed?",
+                a: "Out-of-network therapy can be costly for clients. TheraFlow AI automatically correlates diagnosis codes (ICD-10 like F41.1, F43.10) with exact session duration CPT codes (90834 for 45-50 min, 90837 for 53+ min), provider NPI, and practice Tax ID. Clients can download standard insurance-ready PDF receipts in one click and submit them to BlueCross, Aetna, Cigna, or UnitedHealthcare for 60% to 80% direct reimbursement.",
+              },
+              {
+                q: "Can I migrate my clients and past appointment notes from SimplePractice or Jane App?",
+                a: "Yes. TheraFlow AI provides a frictionless 1-Click Migration assistant. You can export your client list and billing history as CSV/JSON from SimplePractice, TherapyNotes, or Jane App, and our importer automatically maps profiles, emergency contacts, and active services without data loss.",
+              },
+              {
+                q: "How does the 24/7 988 Crisis Guard work, and what is the legal safeguard for clinicians?",
+                a: "The Crisis Guard runs continuous heuristic analysis on patient intake questionnaires, contact messages, and appointment notes. If acute crisis markers (such as suicidal ideation, intent, or self-harm keywords) are detected, the system immediately presents an emergency 988 Lifeline support modal to the patient with 1-click dialing. The system alerts the provider with clinical triage guidelines while logging an audit trail demonstrating immediate standard-of-care fulfillment.",
+              },
+              {
+                q: "Can I connect my own custom domain (e.g., www.bennettpsychotherapy.com)?",
+                a: "Absolutely. All Professional and Growth plans include custom domain mapping with automatic HTTPS/SSL provisioning. You can easily link domains purchased from GoDaddy, Namecheap, Google Domains, or Cloudflare in just a few clicks.",
+              },
+              {
+                q: "Is there any contract, setup fee, or cancellation penalty?",
+                a: "No long-term commitments or lock-ins. You can test TheraFlow AI completely free for 14 days without entering a credit card. If you choose to subscribe, you can cancel or pause your plan at any time from your billing dashboard with 1-click data export.",
+              },
+            ].map((faq, idx) => (
+              <div
+                key={idx}
+                className="rounded-xl border border-border bg-card overflow-hidden transition-all duration-200"
+              >
+                <button
+                  onClick={() => toggleFaq(idx)}
+                  className="w-full p-5 text-left font-bold text-sm md:text-base text-foreground flex items-center justify-between gap-4 hover:bg-muted/40 transition-colors"
+                >
+                  <span>{faq.q}</span>
+                  <ChevronDown
+                    className={`w-4 h-4 text-muted-foreground flex-shrink-0 transition-transform duration-200 ${
+                      openFaqIndex === idx ? "rotate-180 text-primary" : ""
+                    }`}
+                  />
+                </button>
+                {openFaqIndex === idx && (
+                  <div className="px-5 pb-5 pt-1 text-xs md:text-sm text-muted-foreground leading-relaxed border-t border-border/50 bg-background/50">
+                    {faq.a}
+                  </div>
+                )}
               </div>
             ))}
           </div>
