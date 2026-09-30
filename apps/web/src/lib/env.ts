@@ -6,6 +6,14 @@ import { z } from "zod";
  * This prevents silent failures in production.
  */
 
+const emptyToUndefined = (val: unknown) =>
+  typeof val === "string" && val.trim() === "" ? undefined : val;
+
+const optionalString = () => z.preprocess(emptyToUndefined, z.string().optional());
+const optionalEnum = <T extends [string, ...string[]]>(values: T) =>
+  z.preprocess(emptyToUndefined, z.enum(values).optional());
+const optionalNumber = () => z.preprocess(emptyToUndefined, z.coerce.number().optional());
+
 const envSchema = z.object({
   // App
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
@@ -21,36 +29,36 @@ const envSchema = z.object({
   NEXTAUTH_SECRET: z.string().min(32, "NEXTAUTH_SECRET must be at least 32 characters"),
 
   // AI Providers
-  OPENAI_API_KEY: z.string().optional(),
-  ANTHROPIC_API_KEY: z.string().optional(),
+  OPENAI_API_KEY: optionalString(),
+  ANTHROPIC_API_KEY: optionalString(),
   AI_PROVIDER: z.enum(["openai", "anthropic", "mock"]).default("openai"),
   AI_MODEL: z.string().default("gpt-4o-mini"),
-  AI_FALLBACK_PROVIDER: z.enum(["openai", "anthropic", "mock"]).optional(),
-  AI_FALLBACK_MODEL: z.string().optional(),
+  AI_FALLBACK_PROVIDER: optionalEnum(["openai", "anthropic", "mock"]),
+  AI_FALLBACK_MODEL: optionalString(),
   AI_MAX_TOKENS: z.coerce.number().default(2048),
   AI_TEMPERATURE: z.coerce.number().default(0.7),
 
   // Storage
   STORAGE_PROVIDER: z.enum(["local", "s3", "r2"]).default("local"),
   STORAGE_LOCAL_PATH: z.string().default("./uploads"),
-  AWS_ACCESS_KEY_ID: z.string().optional(),
-  AWS_SECRET_ACCESS_KEY: z.string().optional(),
-  AWS_REGION: z.string().optional(),
-  AWS_S3_BUCKET: z.string().optional(),
+  AWS_ACCESS_KEY_ID: optionalString(),
+  AWS_SECRET_ACCESS_KEY: optionalString(),
+  AWS_REGION: optionalString(),
+  AWS_S3_BUCKET: optionalString(),
 
   // Email
   EMAIL_PROVIDER: z.enum(["console", "smtp", "resend", "sendgrid"]).default("console"),
   EMAIL_FROM: z.string().email().default("noreply@theraflow.app"),
-  SMTP_HOST: z.string().optional(),
-  SMTP_PORT: z.coerce.number().optional(),
-  SMTP_USER: z.string().optional(),
-  SMTP_PASS: z.string().optional(),
-  RESEND_API_KEY: z.string().optional(),
+  SMTP_HOST: optionalString(),
+  SMTP_PORT: optionalNumber(),
+  SMTP_USER: optionalString(),
+  SMTP_PASS: optionalString(),
+  RESEND_API_KEY: optionalString(),
 
   // Stripe
-  STRIPE_SECRET_KEY: z.string().optional(),
-  STRIPE_WEBHOOK_SECRET: z.string().optional(),
-  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().optional(),
+  STRIPE_SECRET_KEY: optionalString(),
+  STRIPE_WEBHOOK_SECRET: optionalString(),
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: optionalString(),
 
   // Feature Flags (global defaults, per-tenant overrides in DB)
   FEATURE_AI_COPILOT: z.coerce.boolean().default(true),
@@ -65,7 +73,7 @@ const envSchema = z.object({
   LOG_LEVEL: z.enum(["debug", "info", "warn", "error"]).default("info"),
 
   // Security
-  ENCRYPTION_KEY: z.string().optional(), // For encrypting credentials at rest
+  ENCRYPTION_KEY: optionalString(), // For encrypting credentials at rest
   MAX_FILE_SIZE_MB: z.coerce.number().default(10),
 });
 

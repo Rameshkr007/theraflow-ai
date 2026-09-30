@@ -50,10 +50,9 @@ export async function createAuditLog(
         userAgent: context.userAgent,
         action: entry.action,
         resourceType: entry.resourceType,
-        resourceId: entry.resourceId,
-        oldValue: entry.oldValue !== undefined ? JSON.parse(JSON.stringify(entry.oldValue)) : undefined,
-        newValue: entry.newValue !== undefined ? JSON.parse(JSON.stringify(entry.newValue)) : undefined,
-        metadata: entry.metadata,
+        oldValue: entry.oldValue !== undefined ? (JSON.parse(JSON.stringify(entry.oldValue)) as import("@prisma/client").Prisma.InputJsonValue) : undefined,
+        newValue: entry.newValue !== undefined ? (JSON.parse(JSON.stringify(entry.newValue)) as import("@prisma/client").Prisma.InputJsonValue) : undefined,
+        metadata: entry.metadata !== undefined ? (JSON.parse(JSON.stringify(entry.metadata)) as import("@prisma/client").Prisma.InputJsonValue) : undefined,
       },
     });
   } catch (error) {

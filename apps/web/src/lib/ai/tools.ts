@@ -282,7 +282,7 @@ export const writeTools = {
           },
           preview: {
             before: currentPage.content,
-            after: params.proposedContent,
+            after: params.proposedContent as import("@prisma/client").Prisma.InputJsonValue,
           },
         },
       });
@@ -314,7 +314,7 @@ export const writeTools = {
             type: params.type,
           },
           preview: {
-            proposedContent: params.proposedContent,
+            proposedContent: params.proposedContent as import("@prisma/client").Prisma.InputJsonValue,
           },
         },
       });
